@@ -190,6 +190,7 @@ img {
   margin-bottom: 25px;
 }
 #wrap #main-content .products .item .entry-content {
+  text-align: justify;
   color: #3c3c3c;
 }
 #wrap .sidebar {
