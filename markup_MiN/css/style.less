@@ -7,7 +7,7 @@
 
 @basic-color: #0481c2;
 @link-color: #878787;
-@external-font: 'Trebuchet MS';
+@external-font: 'Trebuchet MS', Arial, Helvetica, sans-serif;
 @top-indent: 22px; // Main/aside top indent
 
 /*Basic style*/
@@ -24,24 +24,30 @@ body > #wrap {
 h2 {
   font-size: 24px;
   font-family: @external-font;
+  line-height: 1.1em;
   color: @basic-color;
-  margin: 25px 0 5px 0;
+  margin: 25px 0 2px 0;
 }
 
 h3 {
   font-size: 18px;
   font-family: @external-font;
+  line-height: 1.1em;
   color: @basic-color;
+  margin: 12px 0;
 }
 
 h4 {
   font-size: 14px;
   font-family: @external-font;
+  line-height: 1.1em;
+  margin: 15px 0;
   color: @basic-color;
 }
 
 p {
   font-size: 12px;
+  margin: 10px 0;
   line-height: 14.5px;
 }
 
@@ -58,7 +64,8 @@ img {
   width: 100%;
   display: block;
 }
-*{
+
+* {
   box-sizing: border-box;
 }
 
@@ -165,10 +172,10 @@ img {
         width: 30%;
         overflow: hidden;
         .hero-text {
-          width:95%;
+          width: 95%;
           color: #fff;
           padding: 15px;
-          display:inline-block;
+          display: inline-block;
           vertical-align: middle;
 
           h3 {
@@ -177,12 +184,12 @@ img {
           }
         }
 
-        &::after{
-          width:1%;
+        &::after {
+          width: 1%;
           content: '';
           display: inline-block;
           vertical-align: middle;
-          height:100%;
+          height: 100%;
         }
 
       }
@@ -202,10 +209,8 @@ img {
 
       .item {
         width: 32.5%;
-        margin-bottom: 15px;
-        .entry-title {
-          margin-top: -5px;
-        }
+        margin-bottom: 25px;
+
         .entry-content {
           color: #3c3c3c;
         }
@@ -222,7 +227,7 @@ img {
     padding-top: @top-indent;
     width: 229px;
 
-    .search{
+    .search {
       position: relative;
       input[type="search"] {
         border: 1px solid #515151;
@@ -233,10 +238,10 @@ img {
         width: 100%;
       }
 
-      .search-icon{
+      .search-icon {
         position: absolute;
-        top:0;
-        right:0;
+        top: 0;
+        right: 0;
         width: 23px;
         height: 23px;
         background: url(../images/sprite.png) no-repeat -230px top;
@@ -244,8 +249,8 @@ img {
     }
 
     .news {
-      .news-title {
-        padding-bottom: 5px;
+      .news-title{
+        margin-bottom: 25px;
       }
       .article {
         padding-bottom: 23px;
@@ -273,10 +278,10 @@ img {
     float: left;
     .icon-wrap {
       display: inline-block;
-      margin: 5px 10px;
-    &:first-child{
-      margin-left:  0;
-    }
+      margin: 6px 12px;
+      &:first-child {
+        margin-left: 0;
+      }
     }
     .icon {
       width: 23px;

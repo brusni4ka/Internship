@@ -18,22 +18,28 @@ body > #wrap {
 }
 h2 {
   font-size: 24px;
-  font-family: 'Trebuchet MS';
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  line-height: 1.1em;
   color: #0481c2;
-  margin: 25px 0 5px 0;
+  margin: 25px 0 2px 0;
 }
 h3 {
   font-size: 18px;
-  font-family: 'Trebuchet MS';
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  line-height: 1.1em;
   color: #0481c2;
+  margin: 12px 0;
 }
 h4 {
   font-size: 14px;
-  font-family: 'Trebuchet MS';
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  line-height: 1.1em;
+  margin: 15px 0;
   color: #0481c2;
 }
 p {
   font-size: 12px;
+  margin: 10px 0;
   line-height: 14.5px;
 }
 ul li {
@@ -117,7 +123,7 @@ img {
 #wrap #header .main-nav .nav-bar li a {
   font-size: 20px;
   text-transform: capitalize;
-  font-family: 'Trebuchet MS';
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
 }
 #wrap #header .main-nav .nav-bar li.active > a,
 #wrap #header .main-nav .nav-bar li:hover > a,
@@ -181,10 +187,7 @@ img {
 }
 #wrap #main-content .products .item {
   width: 32.5%;
-  margin-bottom: 15px;
-}
-#wrap #main-content .products .item .entry-title {
-  margin-top: -5px;
+  margin-bottom: 25px;
 }
 #wrap #main-content .products .item .entry-content {
   color: #3c3c3c;
@@ -213,7 +216,7 @@ img {
   background: url(../images/sprite.png) no-repeat -230px top;
 }
 #wrap .sidebar .news .news-title {
-  padding-bottom: 5px;
+  margin-bottom: 25px;
 }
 #wrap .sidebar .news .article {
   padding-bottom: 23px;
@@ -235,7 +238,7 @@ img {
 }
 #footer .social-links .icon-wrap {
   display: inline-block;
-  margin: 5px 10px;
+  margin: 6px 12px;
 }
 #footer .social-links .icon-wrap:first-child {
   margin-left: 0;
