@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/style.min.css">
 </head>
 <body>
 <div id="wrap" class="inner-wrap">
     <header id="header" class="clearfix">
-        <strong class="logo"><a href="#">minimal</a></strong>
+        <a class="logo" href="#" title="Minimal">minimal</a>
         <nav class="main-nav">
             <ul class="nav-bar">
-                <li class="active"><a href="#">home</a></li>
-                <li><a href="#">about</a></li>
-                <li><a href="#">portfolio</a></li>
-                <li><a href="#">blog</a></li>
-                <li><a href="#">contact</a></li>
+                <li class="active"><a href="#" title="Home">home</a></li>
+                <li><a href="#" title="About">about</a></li>
+                <li><a href="#" title="Portfolio">portfolio</a></li>
+                <li><a href="#" title="Blog">blog</a></li>
+                <li><a href="#" title="Contact">contact</a></li>
             </ul>
         </nav>
     </header>
     <div class="container">
         <main id="main-content" class="line-decoration">
             <div class="hero-unit">
-                <div class="hero-img"></div>
+                <img src="images/hero-img.jpg" alt="hero-unit">
                 <div class="hero-block">
                     <div class="hero-text">
                         <h3>Content description</h3>
@@ -43,7 +44,7 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad animi architecto asperiores
                             consequatur,consectetur adipisicing elit aperiam architecto deserunt dignissimos... </p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </div>
                 <div class="item">
@@ -56,7 +57,7 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad animi architecto asperiores
                             consequatur,consectetur adipisicing elit aperiam architecto deserunt dignissimos... </p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </div>
                 <div class="item">
@@ -69,7 +70,7 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad animi architecto asperiores
                             consequatur,consectetur adipisicing elit aperiam architecto deserunt dignissimos... </p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </div>
             </div>
@@ -90,7 +91,7 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aut esse fugiat, hic iusto
                             laborequaerat quas.</p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </article>
 
@@ -99,7 +100,7 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aut esse fugiat, hic iusto
                             laborequaerat quas.</p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </article>
 
@@ -108,45 +109,27 @@
                     <div class="entry-content">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam aut esse fugiat, hic iusto
                             laborequaerat quas.</p>
-                        <a href="" class="link">Read more...</a>
+                        <a href="" class="link" title="Read more">Read more...</a>
                     </div>
                 </article>
             </section>
         </div>
     </div>
+    <footer id="footer">
+        <div class="social-links">
+            <ul class="icon-wrap">
+                <li><a href="#" title="Facebook"><span class="icon ico-fb"></span></a></li>
+                <li><a href="#" title="Twitter"><span class="icon ico-tw"></span></a></li>
+                <li><a href="#" title="Linkedin"><span class="icon ico-ln"></span></a></li>
+                <li><a href="#" title="MySpace"><span class="icon ico-ms"></span></a></li>
+                <li><a href="#" class="icon ico-rss"><span class="icon ico-rss"></span></a></li>
+            </ul>
+        </div>
+        <div class="copyright">
+            <p>Copyright &copy; 2010 Minimal. All rights reserved </p>
+        </div>
+    </footer>
 </div>
 
-<footer id="footer" class="inner-wrap">
-    <div class="social-links">
-        <div class="icon-wrap">
-            <a href="#">
-                <span class="icon ico-fb"></span>
-            </a>
-        </div>
-        <div class="icon-wrap">
-            <a href="#">
-                <span class="icon ico-tw"></span>
-            </a>
-        </div>
-        <div class="icon-wrap">
-            <a href="#">
-                <span class="icon ico-ln"></span>
-            </a>
-        </div>
-        <div class="icon-wrap">
-            <a href="#">
-                <span class="icon ico-ms"></span>
-            </a>
-        </div>
-        <div class="icon-wrap">
-            <a href="#">
-                <span class="icon ico-rss"></span>
-            </a>
-        </div>
-    </div>
-    <div class="copyright">
-        <p>Copyright &copy; 2010 Minimal. All rights reserved </p>
-    </div>
-</footer>
 </body>
 </html>
