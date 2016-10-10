@@ -4,7 +4,7 @@
   font-weight: normal;
   font-style: normal;
 }
-/*Basic style*/
+/*Basic styles*/
 html,
 body,
 form,
@@ -19,6 +19,7 @@ body > #wrap {
 h2 {
   font-size: 24px;
   font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-weight: normal;
   line-height: 1.1em;
   color: #0481c2;
   margin: 25px 0 2px 0;
@@ -26,6 +27,7 @@ h2 {
 h3 {
   font-size: 18px;
   font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-weight: normal;
   line-height: 1.1em;
   color: #0481c2;
   margin: 12px 0;
@@ -33,12 +35,14 @@ h3 {
 h4 {
   font-size: 14px;
   font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-weight: normal;
   line-height: 1.1em;
   margin: 15px 0;
   color: #0481c2;
 }
 p {
   font-size: 12px;
+  font-weight: normal;
   margin: 10px 0;
   line-height: 14.5px;
 }
@@ -86,6 +90,7 @@ img {
   flex-flow: row wrap;
   flex-direction: row-reverse;
   justify-content: space-between;
+  flex-wrap: nowrap;
 }
 #wrap {
   /*header*/
@@ -94,6 +99,8 @@ img {
   /*end main*/
   /*sidebar*/
   /*end sidebar*/
+  /*footer*/
+  /*end footer*/
 }
 #wrap #header {
   margin: 50px 0;
@@ -142,11 +149,7 @@ img {
 #wrap #main-content .hero-unit {
   width: 100%;
   position: relative;
-}
-#wrap #main-content .hero-unit .hero-img {
-  background: #2d2d30 url(../images/hero-img.jpg) no-repeat 100% 100%;
-  background-size: cover;
-  height: 300px;
+  overflow: hidden;
 }
 #wrap #main-content .hero-unit .hero-block {
   background-color: rgba(135, 135, 135, 0.47);
@@ -160,7 +163,7 @@ img {
 #wrap #main-content .hero-unit .hero-block .hero-text {
   width: 95%;
   color: #fff;
-  padding: 15px;
+  padding-left: 1.5em;
   display: inline-block;
   vertical-align: middle;
 }
@@ -202,16 +205,16 @@ img {
 }
 #wrap .sidebar .search input[type="search"] {
   border: 1px solid #515151;
-  color: #d2d1d1;
   font-size: 12px;
   min-height: 27px;
-  padding: 0 5px;
+  padding: 0 15px 0px 5px;
   width: 100%;
+  overflow: hidden;
 }
 #wrap .sidebar .search .search-icon {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 4px;
+  right: 6px;
   width: 23px;
   height: 23px;
   background: url(../images/sprite.png) no-repeat -230px top;
@@ -225,60 +228,63 @@ img {
 #wrap .sidebar .news .article .entry-content {
   color: #404040;
 }
-#footer {
+#wrap #footer {
   position: relative;
   height: 100px;
   clear: both;
 }
-#footer .copyright {
+#wrap #footer .copyright {
   float: right;
   color: #404040;
 }
-#footer .social-links {
+#wrap #footer .social-links {
   float: left;
 }
-#footer .social-links .icon-wrap {
+#wrap #footer .social-links .icon-wrap {
   display: inline-block;
-  margin: 6px 12px;
+  margin: 7px 0;
+  padding: 0;
 }
-#footer .social-links .icon-wrap:first-child {
+#wrap #footer .social-links .icon-wrap li {
+  float: left;
+  padding: 0 2px;
+}
+#wrap #footer .social-links .icon-wrap:first-child {
   margin-left: 0;
 }
-#footer .social-links .icon {
+#wrap #footer .social-links .icon {
   width: 23px;
   height: 23px;
   background: url(../images/sprite.png) no-repeat left top;
-  position: absolute;
   display: block;
 }
-#footer .social-links .ico-fb {
+#wrap #footer .social-links .ico-fb {
   background-position: 0 top;
 }
-#footer .social-links .ico-fb:hover {
+#wrap #footer .social-links .ico-fb:hover {
   background-position: -113px top;
 }
-#footer .social-links .ico-tw {
+#wrap #footer .social-links .ico-tw {
   background-position: -23px top;
 }
-#footer .social-links .ico-tw:hover {
+#wrap #footer .social-links .ico-tw:hover {
   background-position: -137px top;
 }
-#footer .social-links .ico-ln {
+#wrap #footer .social-links .ico-ln {
   background-position: -46px top;
 }
-#footer .social-links .ico-ln:hover {
+#wrap #footer .social-links .ico-ln:hover {
   background-position: -161px top;
 }
-#footer .social-links .ico-ms {
+#wrap #footer .social-links .ico-ms {
   background-position: -69px top;
 }
-#footer .social-links .ico-ms:hover {
+#wrap #footer .social-links .ico-ms:hover {
   background-position: -184px top;
 }
-#footer .social-links .ico-rss {
+#wrap #footer .social-links .ico-rss {
   background-position: -92px top;
 }
-#footer .social-links .ico-rss:hover {
+#wrap #footer .social-links .ico-rss:hover {
   background-position: -206px top;
 }
-/*end footer*/
