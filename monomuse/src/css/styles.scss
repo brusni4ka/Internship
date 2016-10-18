@@ -44,7 +44,7 @@ h1 {
 
 h3 {
   font-size: 22px;
-  margin: 20px 0;
+  margin:  0 0 25px 0;
   padding: 9px 0;
   color: #1cc1cb;
   border-bottom: 1px solid #c1c1c1;
@@ -117,7 +117,6 @@ img {
 .tiny-title {
   color: #757575;
   font-size: 10px;
-  padding: 0 18px;
   position: relative;
   margin: 15px 0;
 }
@@ -204,9 +203,7 @@ img {
 
 }
 
-.block-body {
-  padding: 0 10px;
-}
+
 
 #wrap {
 
@@ -459,7 +456,7 @@ img {
         background: linear-gradient(to bottom, rgba(249, 253, 253, 1) 0%, rgba(243, 248, 248, 1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9fdfd', endColorstr='#f3f8f8', GradientType=0);
         .block {
-          min-width: 300px;
+          max-width: 300px;
           color: #676767;
           h4 {
             padding: 0 30px;
@@ -498,7 +495,7 @@ img {
           justify-content: space-between;
 
           .block {
-            max-width: 470px;
+            max-width: 460px;
             article {
               img {
                 float: left;
@@ -606,6 +603,49 @@ img {
           .projects-holder {
             display: flex;
             justify-content: space-between;
+
+            .img {
+              position: relative;
+              .overlay {
+                display: block;
+                position: absolute;
+                z-index: 20;
+                background: rgba(255, 255, 255, 0.8);
+                overflow: hidden;
+                transition: all 0.5s;
+
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: 0;
+              }
+              
+
+              .expand {
+                display: block;
+                position: absolute;
+                background: url("../images/expand.png");
+                z-index: 100;
+                width: 39px;
+                height: 38px;
+                text-align: center;
+                line-height: 50px;
+                font-size: 30px;
+
+                left: 0;
+                right: 0;
+                bottom: 50%;
+                margin: 0 auto -30px auto;
+              }
+
+              &:hover {
+                .overlay {
+                  height: 100%;
+                }
+              }
+            }
+
           }
 
         }
@@ -617,11 +657,10 @@ img {
         min-height: 90px;
         text-align: center;
         font-style: italic;
-        p{
+        p {
           color: #8f8f8f;
           font-size: 18px;
         }
-
 
         span {
           color: #1cc1cb;

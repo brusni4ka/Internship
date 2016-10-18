@@ -30,7 +30,7 @@ h1 {
 
 h3 {
   font-size: 22px;
-  margin: 20px 0;
+  margin: 0 0 25px 0;
   padding: 9px 0;
   color: #1cc1cb;
   border-bottom: 1px solid #c1c1c1;
@@ -89,7 +89,6 @@ img {
 .tiny-title {
   color: #757575;
   font-size: 10px;
-  padding: 0 18px;
   position: relative;
   margin: 15px 0; }
 
@@ -147,9 +146,6 @@ img {
   margin: 0 auto;
   /*  background-color: #fff;
     border-radius: 5px 5px 0 0;*/ }
-
-.block-body {
-  padding: 0 10px; }
 
 #wrap {
   /*top-bar*/
@@ -338,7 +334,7 @@ img {
       background: linear-gradient(to bottom, #f9fdfd 0%, #f3f8f8 100%);
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9fdfd', endColorstr='#f3f8f8', GradientType=0); }
       #wrap #main .content .info .block {
-        min-width: 300px;
+        max-width: 300px;
         color: #676767; }
         #wrap #main .content .info .block h4 {
           padding: 0 30px;
@@ -368,7 +364,7 @@ img {
         display: flex;
         justify-content: space-between; }
         #wrap #main .content .container .duos-blocks .block {
-          max-width: 470px; }
+          max-width: 460px; }
           #wrap #main .content .container .duos-blocks .block article img {
             float: left; }
           #wrap #main .content .container .duos-blocks .block article .article-body {
@@ -450,6 +446,36 @@ img {
         #wrap #main .content .container .projects .projects-holder {
           display: flex;
           justify-content: space-between; }
+          #wrap #main .content .container .projects .projects-holder .img {
+            position: relative; }
+            #wrap #main .content .container .projects .projects-holder .img .overlay {
+              display: block;
+              position: absolute;
+              z-index: 20;
+              background: rgba(255, 255, 255, 0.8);
+              overflow: hidden;
+              transition: all 0.5s;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              width: 100%;
+              height: 0; }
+            #wrap #main .content .container .projects .projects-holder .img .expand {
+              display: block;
+              position: absolute;
+              background: url("../images/expand.png");
+              z-index: 100;
+              width: 39px;
+              height: 38px;
+              text-align: center;
+              line-height: 50px;
+              font-size: 30px;
+              left: 0;
+              right: 0;
+              bottom: 50%;
+              margin: 0 auto -30px auto; }
+            #wrap #main .content .container .projects .projects-holder .img:hover .overlay {
+              height: 100%; }
     #wrap #main .content blockquote {
       margin: 10px 0 30px 0;
       position: relative;
