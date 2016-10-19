@@ -7,9 +7,19 @@
   src: local('TitilliumText22L-Regular'), url('../fonts/TitilliumText22L003.woff') format('woff');
 }
 
+
+@font-face {
+  font-family: 'TitilliumText22L-Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('TitilliumText22L-Bold'), url('../fonts/TitilliumText22L005.woff') format('woff');
+}
+
+
 $basic-fonts: Verdana, Geneva, sans-serif;
 $btn-fonts: Arial, Helvetica, sans-serif;
 $special-font: 'TitilliumText22L-Regular';
+$btn-special-font: 'TitilliumText22L-Bold';
 $basic-font-color: #7c7c7c;
 
 /***BASIC STYLES***/
@@ -45,7 +55,7 @@ h1 {
 h3 {
   font-size: 22px;
   margin: 0 0 25px 0;
-  padding: 9px 0;
+  padding: 10px 5px;
   color: #1cc1cb;
   border-bottom: 1px solid #c1c1c1;
   position: relative;
@@ -57,7 +67,7 @@ h3 {
     position: absolute;
     background: url(../images/triangle.png) no-repeat;
     bottom: -8px;
-    left: 30px;
+    left: 35px;
   }
 
 }
@@ -72,7 +82,7 @@ h4 {
 h5 {
   font-size: 18px;
   color: #000;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 p {
@@ -118,7 +128,8 @@ img {
   color: #757575;
   font-size: 10px;
   position: relative;
-  margin: 15px 0;
+  margin: 0;
+  padding: 5px 0;
 }
 
 .ico-tiny {
@@ -195,9 +206,15 @@ img {
   clear: both;
 }
 
-.inner-wrap {
+.container {
   max-width: 1000px;
   margin: 0 auto;
+}
+
+
+//additional inner padding
+.inner-wrap {
+  padding: 0 20px;
 }
 
 /***MAIN STYLES***/
@@ -447,6 +464,7 @@ img {
         }
       }
 
+      /*Info Block*/
       .info {
         display: flex;
         justify-content: space-between;
@@ -484,9 +502,6 @@ img {
 
 
 
-      .container {
-        padding: 20px;
-
         .block-img {
           width: 220px;
           border: 1px solid #e4e4e4;
@@ -494,12 +509,15 @@ img {
           height: 185px;
           padding: 6px;
         }
+
         .duos-blocks {
           display: flex;
           justify-content: space-between;
 
           .block {
-            max-width: 460px;
+            max-width: 480px;
+            padding: 5px;
+
             article {
               img {
                 float: left;
@@ -508,7 +526,7 @@ img {
               .article-body {
                 float: left;
                 width: 50%;
-                padding-left: 20px;
+                padding-left: 25px;
 
                 .time {
                   position: relative;
@@ -542,41 +560,37 @@ img {
                 margin-right: 20px;
                 border-radius: 5px;
                 border: 0;
-                padding: 0 35px 0 15px;
-                line-height: 40px;
+                padding: 0 40px 0 20px;
+                line-height: 38px;
                 color: #fff;
                 text-transform: uppercase;
+                font-family: $btn-special-font;
                 font-weight: bold;
-                font-size: 14px;
+                font-size: 13px;
                 display: inline-block;
                 position: relative;
                 letter-spacing: 0;
+                text-shadow: 0px 1px 2px rgba(2,2,2,0.3);
 
                 /*gradient*/
                 background: rgba(0, 0, 0, 0);
-                background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(71, 71, 71, 0) 0%, rgba(44, 44, 44, 0) 0%, rgba(89, 89, 89, 0) 0%, rgba(102, 102, 102, 0) 0%, rgba(19, 19, 19, 0) 0%, rgba(28, 28, 28, 0.1) 100%);
-                background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(0%, rgba(0, 0, 0, 0)), color-stop(0%, rgba(71, 71, 71, 0)), color-stop(0%, rgba(44, 44, 44, 0)), color-stop(0%, rgba(89, 89, 89, 0)), color-stop(0%, rgba(102, 102, 102, 0)), color-stop(0%, rgba(19, 19, 19, 0)), color-stop(100%, rgba(28, 28, 28, 0.1)));
-                background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(71, 71, 71, 0) 0%, rgba(44, 44, 44, 0) 0%, rgba(89, 89, 89, 0) 0%, rgba(102, 102, 102, 0) 0%, rgba(19, 19, 19, 0) 0%, rgba(28, 28, 28, 0.1) 100%);
-                background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(71, 71, 71, 0) 0%, rgba(44, 44, 44, 0) 0%, rgba(89, 89, 89, 0) 0%, rgba(102, 102, 102, 0) 0%, rgba(19, 19, 19, 0) 0%, rgba(28, 28, 28, 0.1) 100%);
-                background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(71, 71, 71, 0) 0%, rgba(44, 44, 44, 0) 0%, rgba(89, 89, 89, 0) 0%, rgba(102, 102, 102, 0) 0%, rgba(19, 19, 19, 0) 0%, rgba(28, 28, 28, 0.1) 100%);
                 background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(71, 71, 71, 0) 0%, rgba(44, 44, 44, 0) 0%, rgba(89, 89, 89, 0) 0%, rgba(102, 102, 102, 0) 0%, rgba(19, 19, 19, 0) 0%, rgba(28, 28, 28, 0.1) 100%);
                 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#1c1c1c', GradientType=0);
               }
 
               .tw {
                 background-color: #61dbe9;
-                box-shadow: 0 1px 0px 0px rgba(73, 177, 189, 1);
+                box-shadow: 0 1px 0 0 rgba(73, 177, 189, 1);
                 &:hover {
                   background-color: #68f1ff;
-
                 }
                 &:after {
                   content: '';
                   position: absolute;
                   background: url("../images/btn/tw-btn.png");
-                  width: 22px;
-                  height: 18px;
-                  right: 8px;
+                  width: 21px;
+                  height: 17px;
+                  right: 13px;
                   top: 10px;
                 }
               }
@@ -593,7 +607,7 @@ img {
                   background: url("../images/btn/plus-btn.png");
                   width: 18px;
                   height: 18px;
-                  right: 8px;
+                  right: 13px;
                   top: 10px;
                 }
               }
@@ -603,7 +617,7 @@ img {
         }
         .projects {
           z-index: 10;
-          margin-bottom: 30px;
+          padding-bottom: 45px;
           .projects-holder {
             display: flex;
             justify-content: space-between;
@@ -630,7 +644,7 @@ img {
                 position: absolute;
                 background: url("../images/expand.png");
                 z-index: 100;
-                width: 39px;
+                width: 38px;
                 height: 38px;
                 text-align: center;
                 line-height: 50px;
@@ -652,7 +666,7 @@ img {
           }
 
         }
-      }
+
 
       blockquote {
         margin: 10px 0 30px 0;
@@ -660,9 +674,11 @@ img {
         min-height: 90px;
         text-align: center;
         font-style: italic;
+        line-height: 0px;
         p {
           color: #8f8f8f;
           font-size: 18px;
+          word-spacing: 1px;
         }
 
         span {
@@ -671,6 +687,7 @@ img {
         cite {
           font-family: "Times New Roman", Times, serif;
           font-size: 16px;
+          font-style: normal;
         }
 
         &:before {
@@ -693,19 +710,23 @@ img {
     h3 {
       color: #fff;
       border: none;
+      text-transform: capitalize;
+      margin-bottom: 20px;
       &:after {
         content: none;
-
       }
     }
     a {
       color: #cbcbcb;
     }
     .footer-top > div {
-      float: left;
-      width: 24.3%;
+      width: 235px;
+      padding: 0 10px;
+      display: inline-block;
+      vertical-align: top;
+
       li {
-        padding: 5px 30px;
+        padding: 0 0 16px 40px;
         position: relative;
       }
     }
@@ -758,6 +779,7 @@ img {
         ul {
           li {
             position: relative;
+            padding: 0 0 23px 23px;
 
             &:before {
               content: '';
@@ -766,8 +788,8 @@ img {
               background: url("../images/span.png");
               width: 4px;
               height: 5px;
-              top: 8px;
-              left: -10px;
+              top: 5px;
+              left: 5px;
 
               &:hover:before {
                 left: 4px;
@@ -800,8 +822,9 @@ img {
       position: relative;
       .to-top-btn {
         position: absolute;
+        transform: translateX(-25px);
         bottom: 0;
-        left: 47%;
+        left: 50%;
         background: url("../images/btn/totop-btn.png");
         width: 52px;
         height: 44px;
