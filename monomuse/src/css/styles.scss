@@ -312,7 +312,7 @@ img {
     border-radius: 5px;
     $header-height: 80px;
     .header-top {
-      z-index: 1;
+      z-index: 100000;
       padding: 0 25px;
       margin-bottom: 6px;
       letter-spacing: 1px;
@@ -347,6 +347,13 @@ img {
               font-size: 14px;
               text-transform: capitalize;
             }
+
+             &:hover{
+               .dropdown{
+                 display: block;
+               }
+            }
+
             &.active > a, &:hover > a, &:focus > a {
               color: #5a5a5a;
               &:after {
@@ -367,6 +374,7 @@ img {
               position: absolute;
               width: 160px;
               background-color: #fff;
+              display: none;
               li {
                 padding: 6px 18px;
                 line-height: 1.1em;
@@ -384,6 +392,10 @@ img {
 
               & > li:last-child {
                 border-bottom: none;
+              }
+
+              &:hover{
+                display: block;
               }
             }
 
