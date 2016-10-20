@@ -27,7 +27,7 @@ $basic-font-color: #7c7c7c;
   box-sizing: border-box;
 }
 
-html, body, form, #wrap {
+html, body, form, #wrap, .content {
   height: 100%;
   font-family: $basic-fonts;
 }
@@ -139,40 +139,48 @@ img {
     content: '';
     display: inline-block;
     background: url("../images/sp-tiny-icons.png");
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
   }
 }
 
 .ico-pf {
   &:before {
-    background-position: 13px 0;
+    background-position: -53px 0;
   }
 }
 
 .ico-bl {
   &:before {
-    background-position: 24px 0;
+    background-position: -29px 0;
   }
 }
 
 .ico-ph {
   &:before {
-    background-position: 0 0;
+    background-position: 2px 0;
   }
 }
 
 .ico-em {
   &:before {
-    background-position: 48px 0;
+    background-position: -8px 0;
   }
 }
 
 .ico-lg {
   &:before {
-    background-position: 36px 0;
+    background-position: -18px 0;
   }
 }
+
+.ico-cl {
+  &:before {
+    background-position: -42px 0;
+  }
+}
+
+
 
 .read-more {
   font-size: 12px;
@@ -215,6 +223,7 @@ img {
 //additional inner padding
 .inner-wrap {
   padding: 0 20px;
+  z-index: 5;
 }
 
 /***MAIN STYLES***/
@@ -477,7 +486,7 @@ img {
         .block {
           max-width: 300px;
           color: #676767;
-          margin: auto;
+          margin-top: 25px;;
           h4 {
             padding: 0 30px;
             position: relative;
@@ -532,16 +541,6 @@ img {
                   position: relative;
                   font-size: 10px;
                   color: #676666;
-                  padding-left: 20px;
-                  &:before {
-                    content: '';
-                    position: absolute;
-                    background: url("../images/sp-tiny-icons.png") 13px;
-                    width: 10px;
-                    height: 10px;
-                    top: 0;
-                    left: 0;
-                  }
                 }
               }
 
@@ -621,6 +620,7 @@ img {
           .projects-holder {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
 
             .img {
               position: relative;
@@ -668,38 +668,41 @@ img {
         }
 
 
-      blockquote {
-        margin: 10px 0 30px 0;
-        position: relative;
-        min-height: 90px;
-        text-align: center;
-        font-style: italic;
-        line-height: 0px;
-        p {
-          color: #8f8f8f;
-          font-size: 18px;
-          word-spacing: 1px;
-        }
+      .bottom-bar{
+        min-height: 100px;
+        blockquote {
+          margin: 0;
+          padding: 10px 0;
+          position: relative;
+          text-align: center;
+          font-style: italic;
+          line-height: 0;
+           p {
+            color: #8f8f8f;
+            font-size: 18px;
+          }
 
-        span {
-          color: #1cc1cb;
-        }
-        cite {
-          font-family: "Times New Roman", Times, serif;
-          font-size: 16px;
-          font-style: normal;
-        }
+          span {
+            color: #1cc1cb;
+          }
+          cite {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 16px;
+            font-style: normal;
+          }
 
-        &:before {
-          content: '';
-          position: absolute;
-          background: url("../images/bq.png");
-          width: 21px;
-          height: 14px;
-          top: -14px;
-          left: 0;
+          &:before {
+            content: '';
+            position: absolute;
+            background: url("../images/bq.png");
+            width: 21px;
+            height: 14px;
+            top: 15px;
+            left: 25px;
+          }
         }
       }
+
     }
   }
 
@@ -707,6 +710,7 @@ img {
   #footer {
     font-size: 12px;
     color: #cbcbcb;
+    padding-top: 30px;
     h3 {
       color: #fff;
       border: none;
@@ -718,6 +722,10 @@ img {
     }
     a {
       color: #cbcbcb;
+
+      &:hover{
+        color: #ebebeb;
+      }
     }
     .footer-top > div {
       width: 235px;
@@ -786,7 +794,7 @@ img {
               position: absolute;
               display: block;
               background: url("../images/span.png");
-              width: 4px;
+              width: 2px;
               height: 5px;
               top: 5px;
               left: 5px;
