@@ -2,17 +2,30 @@
 
 @font-face {
   font-family: 'TitilliumText22L-Regular';
-  font-style: normal;
+  src: url('../fonts/titilliumtext22l003-webfont.eot');
+  src: url('../fonts/titilliumtext22l003-webfont.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/titilliumtext22l003-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumtext22l003-webfont.woff') format('woff'),
+  url('../fonts/titilliumtext22l003-webfont.ttf') format('truetype'),
+  url('../fonts/titilliumtext22l003-webfont.svg#titilliumtext22l_rgregular') format('svg');
   font-weight: normal;
-  src: local('TitilliumText22L-Regular'), url('../fonts/TitilliumText22L003.woff') format('woff');
+  font-style: normal;
+
 }
 
 @font-face {
   font-family: 'TitilliumText22L-Bold';
-  font-style: normal;
-  font-weight: normal;
-  src: local('TitilliumText22L-Bold'), url('../fonts/TitilliumText22L005.woff') format('woff');
-}
+    src: url('../fonts/titilliumtext22l005-webfont.eot');
+    src: url('../fonts/titilliumtext22l005-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/titilliumtext22l005-webfont.woff2') format('woff2'),
+    url('../fonts/titilliumtext22l005-webfont.woff') format('woff'),
+    url('../fonts/titilliumtext22l005-webfont.ttf') format('truetype'),
+    url('../fonts/titilliumtext22l005-webfont.svg#titilliumtext22l_rgbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+  }
+
 
 $basic-fonts: Verdana, Geneva, sans-serif;
 $btn-fonts: Arial, Helvetica, sans-serif;
@@ -143,13 +156,13 @@ img {
 
 .ico-tiny {
   position: relative;
-  padding-right: 5px;
   &:before {
     content: '';
     display: inline-block;
     background: url("../images/sp-tiny-icons.png");
     width: 12px;
     height: 12px;
+    margin-right: 5px;
   }
 }
 
@@ -264,22 +277,6 @@ img {
      box-shadow: 10px 25px 10px rgba(0, 0, 0, 0.2);
   }
 }
-.shl_box4:before {
-  content: '';
-  width: 20px;
-  height: 70px;
-  bottom: -30px;
-  left: 11px;
-  position: absolute;
-  z-index: 0;
-  -webkit-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: -10px 10px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: -10px 25px 10px rgba(0, 0, 0, 0.2);
-  -webkit-transform: rotate(0deg) translate(20px, -15px) skew(-20deg);
-  -moz-transform: rotate(0deg) translate(20px, -15px) skew(-20deg);
-  -o-transform: rotate(0deg) translate(20px, -15px) skew(-20deg);
-  transform: rotate(41deg) translate(-46px, -49px) skew(32deg);
-}
 
 /***MAIN STYLES***/
 
@@ -289,11 +286,8 @@ img {
   .top-bar {
     $top-bar-height: 40px;
     padding: 0 5px;
-    min-height: $top-bar-height;
+    line-height: $top-bar-height;
     .contact-us, .account {
-      width: 50%;
-      float: left;
-      line-height: $top-bar-height;
       a {
         color: #bbc1c1;
         font-size: 12px;
@@ -302,7 +296,10 @@ img {
 
     }
     .account {
-      text-align: right;
+      float: right;
+    }
+    .contact-us{
+      float: left;
     }
   }
 
@@ -454,19 +451,29 @@ img {
           display: block;
           cursor: pointer;
           background: url("../images/arrows.png");
-          width: 15px;
-          height: 22px;
+          width: 14px;
+          height: 24px;
+
         }
         .left {
-          left: -30px;
-          bottom: 80px;
+          left: -35px;
+          bottom: 75px;
           background-position: 0 0;
+
+
+          &:hover{
+            background-position: -14px 0;
+          }
         }
 
         .right {
-          right: -30px;
-          bottom: 80px;
+          right: -35px;
+          bottom: 75px;
           background-position: 15px 0;
+
+          &:hover{
+            background-position: 31px 0;
+          }
         }
       }
       /*end slider*/
