@@ -1,0 +1,154 @@
+/**FONTS & ICONS**/
+
+@font-face {
+  font-family: 'titillium_webitalic';
+  src: url('../fonts/titilliumweb-italic-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumweb-italic-webfont.woff') format('woff'),
+  url('../fonts/titilliumweb-italic-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'titillium_weblight';
+  src: url('../fonts/titilliumweb-light-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumweb-light-webfont.woff') format('woff'),
+  url('../fonts/titilliumweb-light-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'titillium_websemibold';
+  src: url('../fonts/titilliumweb-semibold-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumweb-semibold-webfont.woff') format('woff'),
+  url('../fonts/titilliumweb-semibold-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'titillium_webregular';
+  src: url('../fonts/titilliumweb-regular-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumweb-regular-webfont.woff') format('woff'),
+  url('../fonts/titilliumweb-regular-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'titillium_webbold';
+  src: url('../fonts/titilliumweb-bold-webfont.woff2') format('woff2'),
+  url('../fonts/titilliumweb-bold-webfont.woff') format('woff'),
+  url('../fonts/titilliumweb-bold-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+/*icons font*/
+
+@font-face {
+  font-family: 'fontello';
+  src: url('../fonts/footer-social-ico/fontello.eot?16382714');
+  src: url('../fonts/footer-social-ico/fontello.eot?16382714#iefix') format('embedded-opentype'),
+  url('../fonts/footer-social-ico/fontello.woff2?16382714') format('woff2'),
+  url('../fonts/footer-social-ico/fontello.woff?16382714') format('woff'),
+  url('../fonts/footer-social-ico/fontello.ttf?16382714') format('truetype'),
+  url('../fonts/footer-social-ico/fontello.svg?16382714#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+  display: inline-block;
+  text-decoration: inherit;
+  margin-right: .2em;
+  text-align: center;
+
+  font-variant: normal;
+  text-transform: none;
+
+  margin-left: .2em;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /*user style*/
+  line-height: 32px;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+
+}
+
+.icon-twitter:before {
+  content: '\f099';
+}
+
+/* '' */
+.icon-facebook:before {
+  content: '\f09a';
+}
+
+/* '' */
+.icon-gplus:before {
+  content: '\f0d5';
+}
+
+/* '' */
+.icon-mail-alt:before {
+  content: '\f0e0';
+}
+
+/* '' */
+.icon-linkedin:before {
+  content: '\f0e1';
+}
+
+/* '' */
+.icon-dribbble:before {
+  content: '\f17d';
+}
+
+/* '' */
+.icon-behance:before {
+  content: '\f1b4';
+}
+
+/* '' */
+.icon-git:before {
+  content: '\f1d3';
+}
+
+/* '' */
+
+a.ico-rounded {
+  &:before {
+    background-color: #bdd1df;
+    border-radius: 20px;
+  }
+  &:hover {
+    &:before {
+
+      color: #BDD1DF;
+      background-color: #fff;
+      transition: 0.2s;
+    }
+  }
+}
+
+
+
+
+

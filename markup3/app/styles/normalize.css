@@ -11,8 +11,8 @@
    ========================================================================== */
 
 html {
-    font-family: sans-serif;/* 1 */
-    line-height: 1.15;/* 2 */
+    /* font-family: sans-serif; *//* 1 */
+    /* line-height: 1.15; *//* 2 */
     -ms-text-size-adjust: 100%;/* 3 */
     -webkit-text-size-adjust: 100%;/* 3 */
 }
@@ -103,8 +103,8 @@ pre {
  */
 
 a {
-    background-color: transparent; /* 1 */
-    -webkit-text-decoration-skip: objects; /* 2 */
+    /* background-color: transparent; *//* 1 */
+    -webkit-text-decoration-skip: objects;/* 2 */
 }
 
 /**
@@ -114,7 +114,7 @@ a {
 
 a:active,
 a:hover {
-    outline-width: 0;
+    /* outline-width: 0; */
 }
 
 /**
@@ -231,7 +231,7 @@ audio:not([controls]) {
 
 img {
     border-style: none;
-    width: auto;
+    /* width: 100%; */
 }
 
 /**
