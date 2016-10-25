@@ -80,11 +80,15 @@ a {
 
 input, textarea {
   margin: 13px 0;
-  padding: 25px;
+  padding:  0 25px;
   border: 0;
   border-radius: 3px;
   background-color: #273a71;
   color: #fff;
+}
+
+textarea{
+  padding:  25px;
 }
 
 ::-webkit-input-placeholder {

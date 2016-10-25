@@ -368,8 +368,14 @@ textarea {
 
 [type="checkbox"],
 [type="radio"] {
-    box-sizing: border-box; /* 1 */
-    padding: 0; /* 2 */
+    box-sizing: border-box;/* 1 */
+    padding: 0;/* 2 */
+    position: absolute;
+    /* visibility: hidden; */
+    width: 35px;
+    height: 35px;
+    margin: 0;
+    z-index: 2;
 }
 
 /**
