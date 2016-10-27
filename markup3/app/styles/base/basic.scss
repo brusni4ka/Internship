@@ -57,7 +57,7 @@ h4 {
   font-size: 18px;
   font-family: $extra-font-regular;
   text-transform: uppercase;
-  padding-top: 25px;
+  padding-top: 20px;
 }
 
 p {
@@ -161,7 +161,7 @@ body {
   text-transform: uppercase;
   font-family: $extra-font-semibold;
   font-size: 18px;
-  padding: 24px 80px;
+  padding:20px 85px;
   margin: 5px;
 }
 
@@ -183,7 +183,7 @@ body {
   //flex-flow:row wrap;
 
   .item {
-    flex-basis: 25%;
+    flex-basis: 260px;
     padding: 10px 0;
 
     img{

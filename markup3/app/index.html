@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>markup3</title>
 
-
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
   <!-- endbower -->
@@ -112,7 +111,9 @@
         </div>
         <div class="block">
           <div class="item">
-            <img src="images/team-img.png" alt="branding"/>
+            <div class="visual">
+              <img src="images/team-img.png" alt="branding"/>
+            </div>
             <div class="name-wrap">
               <h3>anne hathway</h3>
               <small>CEO / Marketing Guru</small>
@@ -128,7 +129,9 @@
             </div>
           </div>
           <div class="item">
-            <img src="images/team-img.png" alt="design"/>
+            <div class="visual">
+              <img src="images/team-img.png" alt="design"/>
+            </div>
             <div class="name-wrap">
               <h3>kate upton</h3>
               <small>Creative Director</small>
@@ -143,7 +146,9 @@
             </div>
           </div>
           <div class="item">
-            <img src="images/team-img.png" alt="development"/>
+            <div class="visual">
+              <img src="images/team-img.png" alt="development"/>
+            </div>
             <div class="name-wrap">
               <h3>olivia wilde</h3>
               <small>Lead Designer</small>
@@ -158,7 +163,9 @@
             </div>
           </div>
           <div class="item">
-            <img src="images/team-img.png" alt="rocket science"/>
+            <div class="visual">
+              <img src="images/team-img.png" alt="rocket science"/>
+            </div>
             <div class="name-wrap">
               <h3>ashley green</h3>
               <small>SEO / Developer</small>
@@ -188,7 +195,7 @@
         </div>
         <div class="block">
           <div class="item">
-            <div class="cont" data-pct="100">
+            <div class="cont" data-pct="90">
               <svg class="svg" width="170" height="170" viewport="0 0 150 92" version="1.1"
                    xmlns="http://www.w3.org/2000/svg">
                 <circle r="73" cx="85" cy="85" fill="transparent" stroke-dasharray="565.48"
@@ -200,7 +207,7 @@
             <h3>web design</h3>
           </div>
           <div class="item">
-            <div class="cont" data-pct="100">
+            <div class="cont" data-pct="75">
               <svg class="svg" width="170" height="170" viewport="0 0 150 92" version="1.1"
                    xmlns="http://www.w3.org/2000/svg">
                 <circle r="73" cx="85" cy="85" fill="transparent" stroke-dasharray="565.48"
@@ -212,7 +219,7 @@
             <h3>html/css</h3>
           </div>
           <div class="item">
-            <div class="cont" data-pct="100">
+            <div class="cont" data-pct="70">
               <svg class="svg" width="170" height="170" viewport="0 0 150 92" version="1.1"
                    xmlns="http://www.w3.org/2000/svg">
                 <circle r="73" cx="85" cy="85" fill="transparent" stroke-dasharray="565.48"
@@ -224,7 +231,7 @@
             <h3>graphic design</h3>
           </div>
           <div class="item">
-            <div class="cont" data-pct="100">
+            <div class="cont" data-pct="85">
               <svg class="svg" width="170" height="170" viewport="0 0 150 92" version="1.1"
                    xmlns="http://www.w3.org/2000/svg">
                 <circle r="73" cx="85" cy="85" fill="transparent" stroke-dasharray="565.48"
@@ -413,6 +420,8 @@
   <!-- endbuild -->
 
   <!-- build:js scripts/main.js -->
+  <script src="scripts/onScroll.js"></script>
+  <script src="scripts/circleAnim.js"></script>
   <script src="scripts/main.js"></script>
   <!-- endbuild -->
 </div>

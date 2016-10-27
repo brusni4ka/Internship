@@ -1,8 +1,7 @@
-@import "normalize.css";
-@import "variables";
-@import "basic";
-@import "animation";
-@import "animate.css";
+@import "base/normalize";
+@import "base/variables";
+@import "base/basic";
+@import "base/animation";
 
 // bower:scss
 // endbower
@@ -110,6 +109,7 @@
     color: #fff;
     img {
       height: 135px;
+      width: auto;
     }
   }
 
@@ -123,7 +123,7 @@
     }
 
     .name-wrap {
-      padding-top: 30px;
+      padding-top: 25px;
     }
 
     .text-wrap {
@@ -131,8 +131,13 @@
     }
 
     .socials {
-      padding: 7px 0;
+      padding: 10px 0;
     }
+
+    .visual{
+      border-radius: 100%;
+    }
+
   }
 
   .about {
@@ -190,17 +195,15 @@
 
       &:after {
         position: absolute;
-        display: block;
-        left: 60%;
-        top: 50%;
+        left: 0;
+        top: 0;
+        width: 100%;
         content: attr(data-pct) "%";
         color: #3c4761;
-        margin-top: -85px;
-        margin-left: -80px;
         border-radius: 100%;
         line-height: 170px;
         font-size: 50px;
-        font-family: $extra-font-light;
+        font-family: "titillium_weblight";
 
       }
     }
@@ -252,6 +255,7 @@
       padding-bottom: 45px;
     }
     .tabs-link {
+        margin-top: -10px;
       a {
         color: #393939;
         background-color: rgba(0, 0, 0, .1);
@@ -266,6 +270,7 @@
     .btn {
       background: #17c2a4;
       border-color: #14a58c;
+      padding: 20px 60px;
       @include btn_sliding_effect(#14a58c, #17c2a4)
     }
     .tabs {
@@ -368,14 +373,23 @@
 @media screen and (max-width: 991px) {
 
   #main {
-    .services .block, .team .block, .about .block, .work .block, .blog .block {
+    .services .block, .team .block, .work .block, .about .block, .blog .block {
+      flex-wrap: wrap;
+      .item {
+        flex-basis: 50%;
+      }
     }
-    flex-wrap: wrap;
-    .item {
-      flex-basis: 50%;
+
+    .work{
+      .block .item {
+        padding: 0 10px;
+        img {
+          width: 100%;
+        }
+      }
     }
+
   }
-}
 
 /* Small devices */
 @media screen and (max-width: 767px) {
@@ -473,16 +487,9 @@
       flex-direction: row;
       .item {
         flex-basis: 100%;
-        img {
-          width: auto;
-        }
       }
     }
     .work {
-
-      .block .item img {
-        width: 100%;
-      }
       .tabs-holder {
         padding-bottom: 20px;
       }
@@ -510,7 +517,7 @@
     .contact {
       .feedback-form {
         width: 100%;
-        input {
+        input, textarea{
           width: 100%;
           float: left;
         }
@@ -539,7 +546,7 @@
   }
 
 }
-
+}
 /* Large devices */
 //@media (min-width: 1200px) { }
 
