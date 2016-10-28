@@ -1,31 +1,41 @@
 /**
  * Created by kate on 27/10/16.
  */
-var AnimateOnScroll = (function () {
-  var _window = null;
-  var _winH = null;
-  var _winY = null;
-  var _winBottom = null;
+var AnimateOnScroll =(function () {
 
-  //Take an object as param (key: className, value: callback)
-  var init = function (animated_blocks) {
-
-    if (_window)return;
-    _window = window;
-    _winH = _window.innerHeight;
-    _winY = _window.scrollY;
-    _winBottom = (_winY + _winH);
-    document.addEventListener('scroll', checkIfInView.bind(checkIfInView,animated_blocks), true)
+  var  init = function (params) {
+    // Capture scroll events
+    document.addEventListener('scroll', function () {
+      checkAnimation(params);
+    });
   };
 
-  function checkIfInView(elements) {
-    console.log('here');
+  function isElementInViewport(elem) {
+
+    // Get the scroll position of the page.
+    var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? document.body : document.html);
+    var viewportTop = scrollElem.scrollTop;
+    var viewportBottom = viewportTop + window.innerHeight;
+
+    // Get the position of the element on the page.
+    var elemTop = Math.round(elem.offsetTop);
+    var elemBottom = elemTop + elem.offsetHeight;
+    return ((elemTop < viewportBottom) && (elemBottom > viewportTop));
+  }
+
+// Check if it's time to start the animation.
+  function checkAnimation(elements) {
     for (var key in elements) {
       if (elements.hasOwnProperty(key)) {
         var elementsList = document.querySelectorAll(key);
         for (var i = 0; i < elementsList.length; i++) {
-          if(isVisible(elementsList[i]) && !elementsList[i].classList.contains('animated')){
-            elementsList[i].classList.add('animated')
+
+          // If the animation has already been started
+          if (elementsList[i].classList.contains('animated')) return;
+
+          if (isElementInViewport(elementsList[i])) {
+            // Start the animation
+            elementsList[i].classList.add('animated');
             elements[key](elementsList[i]);
           }
 
@@ -33,15 +43,6 @@ var AnimateOnScroll = (function () {
       }
     }
   }
-  function isVisible(el) {
-
-    var elH = el.offsetHeight;
-      var elTop = el.offsetTop;
-      var elBottom = (elTop + elH);
-      //check to see if this current container is within viewport
-      return  ((elBottom >= _winY) && (elTop <= _winBottom));
-    }
-
   return {
     init: init
   }

@@ -1,5 +1,5 @@
 ;(function () {
-  AnimateOnScroll.init({'.cont': circleProgress});
+  AnimateOnScroll.init({'.progress': circleProgress});
 }());
-   
-   
+
+

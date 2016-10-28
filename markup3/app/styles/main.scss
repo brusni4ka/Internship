@@ -65,7 +65,7 @@
     #main-nav {
       a {
         color: #fff;
-        &:hover {
+        &:hover, &:focus, &:active, &.active {
           background: #643a79;
           transition: .2s;
         }
@@ -147,103 +147,78 @@
       font-family: $extra-font-bold;
     }
 
-    .block .item:nth-child(1) {
-      .svg {
-        .bar {
-          stroke: #30bae7;
-          stroke-dashoffset: 56.54866776461628px;
-        }
-      }
-    }
-    .block .item:nth-child(2) {
-      .svg {
-        .bar {
-          stroke: #d74680;
-          stroke-dashoffset: 141.3716694115407px;
-        }
-      }
-    }
-    .block .item:nth-child(3) {
-      .svg {
-        .bar {
-          stroke: #15c7a8;
-          stroke-dashoffset: 169.64600329384882px;
-        }
-      }
-    }
-    .block .item:nth-child(4) {
-      .svg {
-        .bar {
-          stroke: #eb7d4b;
-          stroke-dashoffset: 84.82300164692441px;
-        }
-      }
-    }
-
-    .svg {
-      circle {
-        stroke-dashoffset: 0;
-        transition: stroke-dashoffset 1s linear;
-        stroke: #dfe8ed;
-        stroke-width: 14px;
-      }
-    }
-    .cont {
+    //SVG Circles
+    .progress {
       display: block;
       position: relative;
       margin-bottom: 10px;
 
+      .progress-circle{
+        transform: rotate(-90deg);
+
+        .progress-circle-back,.progress-circle-prog{
+          transition: stroke-dashoffset 1s linear;
+          stroke: #dfe8ed;
+          stroke-width: 14px;
+        }
+
+        .progress-circle-prog {
+          fill: none;
+          stroke-dasharray: 0 999;
+          stroke-dashoffset: 0px;
+          transition: stroke-dasharray 0.7s linear 0s;
+        }
+
+        .progress-circle-back {
+          fill: none;
+          stroke: #D2D2D2;
+        }
+      }
+
       &:after {
         position: absolute;
-        left: 0;
+        left: 10px;
         top: 0;
         width: 100%;
         content: attr(data-pct) "%";
         color: #3c4761;
         border-radius: 100%;
         line-height: 170px;
-        font-size: 50px;
+        font-size: 3em;
         font-family: "titillium_weblight";
-
       }
     }
 
-    /*
-        #svg circle {
-          stroke-dashoffset: 0;
-          transition: stroke-dashoffset 1s linear;
-          stroke: #666;
-          stroke-width: 1em;
+    .block .item:nth-child(1) {
+      .progress-circle {
+        .progress-circle-prog {
+          stroke: #30bae7;
         }
-        #svg #bar {
-          stroke: #FF9F1E;
+      }
+    }
+    .block .item:nth-child(2) {
+      .progress-circle {
+        .progress-circle-prog {
+          stroke: #d74680;
         }
-        #cont {
-          display: block;
-          height: 200px;
-          width: 200px;
-          margin: 2em auto;
-          box-shadow: 0 0 1em black;
-          border-radius: 100%;
-          position: relative;
+      }
+    }
+    .block .item:nth-child(3) {
+      .progress-circle {
+        .progress-circle-prog {
+          stroke: #15c7a8;
         }
-        #cont:after {
-          position: absolute;
-          display: block;
-          height: 160px;
-          width: 160px;
-          left: 50%;
-          top: 50%;
-          box-shadow: inset 0 0 1em black;
-          content: attr(data-pct)"%";
-          margin-top: -80px;
-          margin-left: -80px;
-          border-radius: 100%;
-          line-height: 160px;
-          font-size: 2em;
-          text-shadow: 0 0 0.5em black;
+      }
+    }
+    .block .item:nth-child(4) {
+      .progress-circle {
+        .progress-circle-prog {
+          stroke: #eb7d4b;
         }
-        */
+      }
+    }
+
+
 
   }
 
@@ -487,11 +462,13 @@
       flex-direction: row;
       .item {
         flex-basis: 100%;
+        padding-bottom: 20px;
       }
     }
     .work {
       .tabs-holder {
         padding-bottom: 20px;
+
       }
 
       .tabs-link a {
