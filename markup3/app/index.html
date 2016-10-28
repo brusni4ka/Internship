@@ -368,13 +368,21 @@
           <p>1600 Pennsylvania Ave NW, Washington, DC 20500, United States of America. Tel: (202) 456-1111</p>
         </div>
 
-        <form action="#" class="feedback-form" method="post">
-          <input type="text" placeholder="Name">
-          <input type="text" placeholder="Your email">
-          <textarea rows="10" placeholder="Your message"></textarea>
-          <a href="#" class="btn" role="button">send message</a>
-
+        <form class="feedback-form">
+          <div>
+            <input id="name" name="name" type="text"  required>
+            <label for="name">Your Name</label>
+          </div>
+          <div>
+            <input id="email" name="email" type="email" required >
+            <label for="email">Your email</label>
+          </div>
+          <div>
+            <textarea id="message" name="phone" required ></textarea>
+            <label for="message">Your message</label>
+          </div>
         </form>
+
       </div>
     </section>
     <!--end contact-->
@@ -419,7 +427,6 @@
   <script src="scripts/onScroll.js"></script>
   <script src="scripts/circleAnim.js"></script>
   <script src="scripts/main.js"></script>
-
 
 
   <!-- endbuild -->

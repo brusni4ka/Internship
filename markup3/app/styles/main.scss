@@ -300,9 +300,32 @@
       width: 80%;
       margin: 0 auto;
       text-align: center;
+      & > div {
+        position: relative;
+        display: inline-block;
+        width: 49%;
+        margin: 5px 0;
 
+        &:last-child{
+          display: block;
+          width: 100%;
+        }
+
+        & label{
+          position: absolute;
+          top: 20px;
+          left: 25px;
+        }
+      }
+
+      label:after{
+        content: '*';
+        padding-left: 2px;
+        display: inline-block;
+        color: #FF1493;
+      }
       input {
-        width: 47%;
+        width: 97%;
         margin: 1%;
         height: 55px;
         background-color: #273a71;
@@ -312,6 +335,17 @@
         width: 97%;
         margin: 1%;
         resize: vertical;
+        min-height: 200px;
+      }
+
+      input,textarea{
+        &:focus + label, &:valid + label {
+          transition: .4s;
+          font-size: 70%;
+          z-index: 2;
+          margin: -10px;
+        }
+
 
       }
       .btn {

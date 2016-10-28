@@ -30,8 +30,8 @@ var AnimateOnScroll =(function () {
         var elementsList = document.querySelectorAll(key);
         for (var i = 0; i < elementsList.length; i++) {
 
-          // If the animation has already been started
-          if (elementsList[i].classList.contains('animated')) return;
+          // If the animation has been  started already
+          if (elementsList[i].classList.contains('animated')) continue;
 
           if (isElementInViewport(elementsList[i])) {
             // Start the animation

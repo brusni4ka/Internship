@@ -80,7 +80,7 @@ a {
 
 input, textarea {
   margin: 13px 0;
-  padding:  0 25px;
+  padding: 25px;
   border: 0;
   border-radius: 3px;
   background-color: #273a71;
@@ -91,37 +91,6 @@ textarea{
   padding:  25px;
 }
 
-::-webkit-input-placeholder {
-  color: #fff;
-  &:after {
-    content: '*';
-    color: #ff4444;
-  }
-}
-
-:-moz-placeholder {
-  color: #fff;
-  &:after {
-    content: '*';
-    color: #ff4444;
-  }
-}
-
-::-moz-placeholder {
-  color: #fff;
-  &:after {
-    content: '*';
-    color: #ff4444;
-  }
-}
-
-:-ms-input-placeholder {
-  color: #fff;
-  &:after {
-    content: ' *';
-    color: #ff4444;
-  }
-}
 
 figure {
   margin: 0;
