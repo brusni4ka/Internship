@@ -14,7 +14,7 @@ var circleProgress = function (holder) {
         circle.style.strokeDashoffset = circumference - ((i / 100) * circumference);
         circle.style.strokeDasharray = circumference;
         holder.setAttribute('data-pct', i.toString());
-      }, i * 15);
+      }, i * 25);
     })(i);
   }
 };
