@@ -302,6 +302,13 @@
       width: 80%;
       margin: 0 auto;
       text-align: center;
+
+      //textarea
+      & :nth-of-type(3) {
+        display: block;
+        width: 97%;
+        margin: 0 auto;
+      }
       & > div {
         position: relative;
         display: inline-block;
@@ -309,16 +316,10 @@
         margin: 1%;
         padding-bottom: 10px;
 
-        &:last-child {
-          display: block;
-          width: 97%;
-          margin: 0 auto;
-        }
-
         & label {
           position: absolute;
-          top: 20px;
-          left: 25px;
+          top: 25px;
+          left: 35px;
         }
       }
 
@@ -354,6 +355,7 @@
         }
       }
       .btn {
+        transform: translateY(50%);
         background-color: #30bae7;
         border-color: #299ec5;
         @include btn_sliding_effect(#299ec5, #30bae7)
@@ -552,35 +554,45 @@
       .contact {
         .feedback-form {
           width: 100%;
-          & > div {
+          & > div, & > div:last-child {
             width: 100%;
+            margin: 0;
+
+            input, textarea {
+              width: 100%;
+              margin: 5px  0;
+            }
           }
 
+          & :nth-of-type(3) {
+            width: 100%;
+           }
         }
       }
 
-    }
 
-    #footer {
-      a {
-        margin: 0;
-      }
-      .socials-links {
-        display: none;
-      }
-      .socials {
-        display: block;
-        a.icon:hover {
-          &:before {
-            color: #00b0e2;
-            transition: 0.5s;
-          }
-        }
-      }
+}
 
-    }
-
+#footer {
+  a {
+    margin: 0;
   }
+  .socials-links {
+    display: none;
+  }
+  .socials {
+    display: block;
+    a.icon:hover {
+      &:before {
+        color: #00b0e2;
+        transition: 0.5s;
+      }
+    }
+  }
+
+}
+
+}
 }
 
 /* Large devices */

@@ -13,7 +13,7 @@ var AnimateOnScroll =(function () {
   function isElementInViewport(elem) {
 
     // Get the scroll position of the page.
-    var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? document.body : document.html);
+    var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? document.body : document.documentElement);
     var viewportTop = scrollElem.scrollTop;
     var viewportBottom = viewportTop + window.innerHeight;
 
