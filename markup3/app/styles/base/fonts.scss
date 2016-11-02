@@ -73,13 +73,11 @@
 
   display: inline-block;
   text-decoration: inherit;
-  margin-right: .2em;
   text-align: center;
 
   font-variant: normal;
   text-transform: none;
 
-  margin-left: .2em;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -89,6 +87,7 @@
   color: #fff;
   width: 32px;
   height: 32px;
+  margin: 0 5px;
 
 }
 
