@@ -15,6 +15,13 @@
   padding: 0.2em 0;
 }
 
+html, body, .widget-holder{
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
 
 //button
 .buttons{
@@ -40,7 +47,10 @@ button {
 body{
   font-family: 'Lato', Arial, Helvetica, sans-serif;
   height: 100%;
-  animation: wrap-color 5s infinite linear;
+  animation: wrap-color 5s linear;
+  animation-fill-mode:forwards;
+  //animation-iteration-count: 1;
+
 }
 
 .widget {
@@ -69,7 +79,7 @@ body{
       padding-top: 90px;
       box-sizing: border-box;
       z-index: 0;
-      animation: wrap-color 5s infinite linear;
+
     }
 
 
@@ -80,7 +90,6 @@ body{
       height: 130px;
       border-radius: 50%;
       position: relative;
-      animation: sky 5s infinite linear;
 
 
       &:before {
@@ -93,7 +102,7 @@ body{
         left: 50%;
         transform: translate(-50%, -50%);
         border-radius: 50%;
-        animation: sky-outer-circles 5s infinite linear;
+
         /*background: #a6c3f1;
         border:45px solid #8abff1;*/
       }
@@ -156,138 +165,136 @@ body{
         transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
       }
 
-        input[type="checkbox"]{
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-        }
-      }
-
-      &:hover{
-        .remember{
-          max-height: 35px;
-          height: 35px;
-          opacity: 1;
-
-          transition-property: all;
-          transition-duration: .5s;
-          transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-        }
+      input[type="checkbox"]{
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
       }
     }
 
-    .btn-holder{
-      margin: 0 auto;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      position: absolute;
-      height: 3em;
-      width: 3em;
-      border-radius: 50%;
-      background-color: #72BAC8;
-      box-shadow: 0 5px 6px 0 rgba(0,0,0,0.4);
-      z-index: 1000000;
-    }
+    &:hover{
+      .remember{
+        max-height: 35px;
+        height: 35px;
+        opacity: 1;
 
-
-
-    .rounded-btn {
-      position: relative;
-      font-size: 45px;
-      text-align: center;
-      width: 100%;
-      height: 100%;
-      display: block;
-
-
-      &::before, &::after{
-        content: '';
-        position: absolute;
-        width: 2px;
-        height: 0.5em;
-        background-color: #fff;
-        line-height: 1em;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        border-radius: 5px;
-      }
-
-      &:before{
-        width: 0.5em;
-        height: 2px;
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
       }
     }
-    .geo-info {
-      text-align: justify;
-      font-size: 12px;
-      color: #5D5C5C;
-      font-weight: bold;
-      top:10px;
-      position: absolute;
-      width: 90%;
-      left: 50%;
-      transform: translateX(-50%);
+  }
 
-      .fa-clock-o {
-        font-size: 25px;
-        vertical-align: middle;
-        font-weight: normal;
-      }
-      .time, .location {
-        display: inline-block;
-      }
-
-      &:after {
-        content: '';
-        display: inline-block;
-        width: 100%;
-      }
-    }
-    .weather-visual {
-      text-align: center;
-    }
-
-    .meteo-info{
-      position: relative;
-      img{
-        position: absolute;
-        top:0;
-        left: 50%;
-        transform: translateX(-50%);
-        margin-top: 15px;
-      }
-    }
-
-    .weather{
-      text-align: center;
-      padding-top: 110px;
-
-      .descr{
-        display: block;
-        padding: 15px 0;
-        text-transform: capitalize;
-      }
-
-      .temp{
-        font-size: 3.5em;
-        font-weight: bold;
-        padding: 5px 0;
-      }
-
-      .other-inf{
-        padding: 25px 0 5px;
-
-      }
-
-      .wind{
-        font-size: 0.7em;
-      }
-    }
-
+  .btn-holder{
+    margin: 0 auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+    background-color: #72BAC8;
+    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.4);
+    z-index: 1000000;
   }
 
 
+
+  .rounded-btn {
+    position: relative;
+    font-size: 45px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: block;
+
+
+    &::before, &::after{
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 0.5em;
+      background-color: #fff;
+      line-height: 1em;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 5px;
+    }
+
+    &:before{
+      width: 0.5em;
+      height: 2px;
+    }
+  }
+  .geo-info {
+    text-align: justify;
+    font-size: 12px;
+    color: #5D5C5C;
+    font-weight: bold;
+    top:10px;
+    position: absolute;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .fa-clock-o {
+      font-size: 25px;
+      vertical-align: middle;
+      font-weight: normal;
+    }
+    .time, .location {
+      display: inline-block;
+    }
+
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 100%;
+    }
+  }
+  .weather-visual {
+    text-align: center;
+  }
+
+  .meteo-info{
+    position: relative;
+    img{
+      position: absolute;
+      top:0;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 15px;
+    }
+  }
+
+  .weather{
+    text-align: center;
+    padding-top: 110px;
+
+    .descr{
+      display: block;
+      padding: 15px 0;
+      text-transform: capitalize;
+    }
+
+    .temp{
+      font-size: 3.5em;
+      font-weight: bold;
+      padding: 5px 0;
+    }
+
+    .other-inf{
+      padding: 25px 0 5px;
+
+    }
+
+    .wind{
+      font-size: 0.7em;
+    }
+  }
+
+}
 .clock{
 
   border-radius: 50%;
@@ -350,144 +357,230 @@ body{
 
 
 
-/*
+
+
+
+
+
+
+
+
 .morning{
 
-  @keyframes wrap-color {
-    0%{
-      background: #CFFFFC;
-    }
-
-    50%{
-      background: #72BDCA;
-
-    }
+  &.bg-wrap,&.widget-holder{
+    animation: wrap-color_morning 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-  @keyframes sky {
-    0%{
-      background: #EBF9FF;
-      border: 45px solid #D8F7FC;
-    }
 
-    50%{
-      background:#CFECF1;
-      border:45px solid #B6E3E7;
-    }
+  &.circle-day{
+    animation: sky_morning 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-  @keyframes sky-outer-circles {
-    0%{
-      background: #C4F5FF;
-      border: 45px solid #AEF2FF;
-    }
 
-    50%{
-      background: #96D6DB;
-      border: 45px solid #7AC8D3;
-    }
-
+  &.circle-day::before{
+    animation: sky-outer-circles_morning 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-}*/
+}
+
+
 
 .day{
-  @keyframes wrap-color {
-    from{
-      background: #72BDCA;
 
-    }
-    to{
-      background: #E3CFFF;
-    }
+  &.bg-wrap,&.widget-holder{
+    animation: wrap-color_day 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-  @keyframes sky {
-    from{
-      background:#CFECF1;
-      border:45px solid #B6E3E7;
-    }
 
-    to{
-      background: #FFC9C9;
-      border: 45px solid #FCD8EA;
-    }
+  &.circle-day{
+    animation: sky_day 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-  @keyframes sky-outer-circles {
-    from{
-      background: #96D6DB;
-      border: 45px solid #7AC8D3;
-    }
-    to{
-      background: #F4D1F7;
-      border: 45px solid #F8DDFF;
-    }
+
+  &.circle-day::before{
+    animation: sky-outer-circles_day 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
 }
 
-/*.evening{
+.evening{
 
-  @keyframes wrap-color {
-    0%{
-      background: #E3CFFF;
-    }
-
-    100%{
-      background: #38383C;;
-    }
-  }
-  @keyframes sky {
-    0%{
-      background: #FFC9C9;
-      border: 45px solid #FCD8EA;
-    }
-
-    100%{
-      background: #595561;
-      border: 45px solid #554D59;
-    }
+  &.bg-wrap,&.widget-holder{
+    animation: wrap-color_evening 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
 
-  @keyframes sky-outer-circles {
-    0%{
-      background: #F4D1F7;
-      border: 45px solid #F8DDFF;
-    }
-
-    100%{
-      background: #4D4955;
-      border: 45px solid #46424B;
-    }
+  &.circle-day{
+    animation: sky_evening 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
+
+  &.circle-day::before{
+    animation: sky-outer-circles_evening 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
+  }
+
 }
-
 .night{
-  @keyframes wrap-color {
-    0%{
-      background: #38383C;;
-    }
-    100%{
-      background: #CFFFFC;
-    }
 
+  &.bg-wrap, &.widget-holder{
+    animation: wrap-color_night 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
+  }
 
+  &.circle-day{
+    animation: sky_night 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
-  @keyframes sky {
-    0%{
-      background: #595561;
-      border: 45px solid #554D59;
-    }
-    100%{
-      background: #EBF9FF;
-      border: 45px solid #D8F7FC;
-    }
-  }
-  @keyframes sky-outer-circles {
-    0%{
-      background: #4D4955;
-      border: 45px solid #46424B;
-    }
-    100%{
-      background: #C4F5FF;
-      border: 45px solid #AEF2FF;
-    }
+
+  &.circle-day::before{
+    animation: sky-outer-circles_night 5s  linear;
+    animation-fill-mode:forwards;
+    animation-iteration-count: 1;
   }
 
 }
-*/
+
+
+//Morning
+@keyframes wrap-color_morning {
+  0%{
+    background: #CFFFFC;
+  }
+
+  100%{
+    background: #72BDCA;
+
+  }
+}
+@keyframes sky_morning {
+  0%{
+    background: #EBF9FF;
+    border: 45px solid #D8F7FC;
+  }
+
+  100%{
+    background:#CFECF1;
+    border:45px solid #B6E3E7;
+  }
+}
+@keyframes sky-outer-circles_morning {
+  0%{
+    background: #C4F5FF;
+    border: 45px solid #AEF2FF;
+  }
+
+  100%{
+    background: #96D6DB;
+    border: 45px solid #7AC8D3;
+  }
+
+}
+
+//Day
+@keyframes wrap-color_day {
+  0%{
+    background: #72BDCA;
+
+  }
+  100%{
+    background: #E3CFFF;
+  }
+}
+@keyframes sky_day {
+  0%{
+    background:#CFECF1;
+    border:45px solid #B6E3E7;
+  }
+
+  100%{
+    background: #FFC9C9;
+    border: 45px solid #FCD8EA;
+  }
+}
+@keyframes sky-outer-circles_day {
+  0%{
+    background: #96D6DB;
+    border: 45px solid #7AC8D3;
+  }
+  100%{
+    background: #F4D1F7;
+    border: 45px solid #F8DDFF;
+  }
+}
+
+//Evening
+@keyframes wrap-color_evening {
+  0%{
+    background: #E3CFFF;
+  }
+
+  100%{
+    background: #38383C;;
+  }
+}
+@keyframes sky_evening {
+  0%{
+    background: #FFC9C9;
+    border: 45px solid #FCD8EA;
+  }
+
+  100%{
+    background: #595561;
+    border: 45px solid #554D59;
+  }
+}
+@keyframes sky-outer-circles_evening {
+  0%{
+    background: #F4D1F7;
+    border: 45px solid #F8DDFF;
+  }
+
+  100%{
+    background: #4D4955;
+    border: 45px solid #46424B;
+  }
+}
+
+//Night
+@keyframes wrap-color_night {
+  0%{
+    background: #38383C;;
+  }
+  100%{
+    background: #CFFFFC;
+  }
+
+
+}
+@keyframes sky_night {
+  0%{
+    background: #595561;
+    border: 45px solid #554D59;
+  }
+  100%{
+    background: #EBF9FF;
+    border: 45px solid #D8F7FC;
+  }
+}
+@keyframes sky-outer-circles_night {
+  0%{
+    background: #4D4955;
+    border: 45px solid #46424B;
+  }
+  100%{
+    background: #C4F5FF;
+    border: 45px solid #AEF2FF;
+  }
+}
