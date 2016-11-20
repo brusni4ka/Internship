@@ -18,6 +18,7 @@
     city: '',
     units: '',
     apikey: 'd934a70081a5cef84dd9dcbf3c0412ed',
+    gtimezonekey: 'AIzaSyBqO6Eblf3EeVW59nndnsXOjrdYtrFrIFU',
     remember: '',
     timezone: ''
   };
@@ -42,7 +43,7 @@
       pressure: '',
       humidity: '',
       imgUrl: '',
-      time: '',
+      time: ''
     };
 
     this.init();
@@ -61,7 +62,6 @@
         this.setSettingsByDefault()
             .then(()=>this.updateWidget());
       }
-
       this.registerEvents();
     },
 
@@ -71,18 +71,12 @@
       console.log('in run');
       this.getWeather()
           .then((response) => {
-        let time = this.getTime();
-      this.setData(this.weatherData, {
-        city: response.name,
-        state: response.sys.country,
-        descr: response.weather[0].description,
-        temp: response.main.temp,
-        humidity: response.main.humidity,
-        pressure: response.main.pressure,
-        speed: response.wind.speed,
-        imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png',
-        time: time
-      });
+        this.setData(this.weatherData, response.weather);
+      return this.getTimeZone(response.coord)
+    })
+    .then((zone)=> {
+        let time = this.getTime(zone);
+      this.setData(this.weatherData, {time: time});
     })
     .then(()=> {
         this.renderWidget(this.weatherData);
@@ -90,7 +84,6 @@
       this.updateTime();
       this.addAutocomplete();
     });
-
     },
 
     updateWidget(){
@@ -112,15 +105,53 @@
     },
 
     getWeather () {
-      //Get the weather data from the open weather API
-      let weatherUrl = this.getWeatherUrl(this.settings);
-      console.log('3', weatherUrl);
-      return $.getJSON(weatherUrl)
+      //Getting the weather data from the open weather API
+      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings.city}&appid=${this.settings.apikey}&units=${this.settings.units}`;
+      console.log('1', weatherUrl);
+      let promise = $.Deferred();
+      $.ajax(weatherUrl, {
+        success(response){
+          promise.resolve({
+            weather: {
+              city: response.name,
+              state: response.sys.country,
+              descr: response.weather[0].description,
+              temp: response.main.temp,
+              humidity: response.main.humidity,
+              pressure: response.main.pressure,
+              speed: response.wind.speed,
+              imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png',
+            },
+            coord: {
+              lat: response.coord.lat,
+              lon: response.coord.lon
+            }
+          });
+        }
+      });
+      return promise;
     },
 
-    getTime(){
-      let timeZone = this.settings.timezone;
-      return moment().tz(timeZone);
+    getTime(zone){
+      console.log(3, 'getTime');
+      console.log(zone);
+      return moment().tz(zone);
+
+    },
+
+
+    getTimeZone(geodatas){
+      let timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?` +
+          `location=${geodatas.lat},${geodatas.lon}&timestamp=1331161200&key=${this.settings.gtimezonekey}`;
+      console.log('2', timezoneUrl);
+      let promise = $.Deferred();
+      $.ajax(timezoneUrl, {
+            success: (data)=> {
+            console.log('2', data.timeZoneId);
+      promise.resolve(data.timeZoneId);
+    }
+    });
+      return promise;
     },
 
     updateTime(delayTime){
@@ -154,6 +185,7 @@
     },
 
     renderWidget (dataWeather) {//render from string
+      console.dir(4, 'renderWidget', dataWeather);
       let ischecked = this.settings.remember ? 'checked' : '';
       let activeUnit = this.settings.units;
       let metric = 'metric' === activeUnit ? 'active' : '';
@@ -172,16 +204,6 @@
                 </div>
                 <span class="wind">Winds: ${dataWeather.speed} MPH</span>
               </div>`;
-
-      /*<animateTransform
-       attributeName="transform"
-       dur="5s"
-       type="rotate"
-       from="0 50 70"
-       to="360 50 72"
-       repeatCount="indefinite"
-       />*/
-
       let template =
           `
           <div class="widget">
@@ -260,7 +282,7 @@
           duration: 500,
           easing: 'swing',
           step: function (now) {
-            $(this).text(Math.ceil(now));
+            $(this).html(Math.ceil(now) + '&#176');
           }
         });
 
@@ -270,7 +292,7 @@
 
     renderDay(){
       let time = this.weatherData.time;
-      let hours = moment(time).hours() ;
+      let hours = moment(time).hours();
       let dayClass = '';
 
       console.log(hours);
@@ -283,14 +305,22 @@
 
       ];
 
-      let dayList = ['morning', 'day', 'evening', 'night'];
+      let dayList = [
+        'early_morning',
+        'late_morning',
+        'early_day',
+        'late_day',
+        'early_evening',
+        'late_evening',
+        'night'
+      ];
 
-      if (hours >= 5 && hours < 12) {
+      if (hours > 5 && hours < 12) {
         dayClass = 'morning';
 
-      } else if (hours >= 11 && hours < 17) {
+      } else if (hours >= 11 && hours <= 17) {
         dayClass = 'day';
-      } else if (hours >= 17 && hours < 24) {
+      } else if (hours > 17 && hours < 24) {
         dayClass = 'evening';
       } else {
         dayClass = 'night';
@@ -298,8 +328,8 @@
 
 
       console.log(dayClass);
-      dayElements.forEach((el)=>{
-        dayList.forEach((day)=>{
+      dayElements.forEach((el)=> {
+        dayList.forEach((day)=> {
         el.removeClass(day);
     });
       el.addClass(dayClass);
@@ -414,9 +444,9 @@
       return false;
     },
 
-    getWeatherUrl(data){//vtopku
-      return `http://api.openweathermap.org/data/2.5/weather?q=${data.city}&appid=${data.apikey}&units=${data.units}`;
-    },
+    /*   getWeatherUrl(data){//vtopku
+     return `http://api.openweathermap.org/data/2.5/weather?q=${data.city}&appid=${data.apikey}&units=${data.units}`;
+     },*/
 
     getLocation(){
       return new Promise((resolve, reject) => {
@@ -430,11 +460,12 @@
 
     //additional features
     addAutocomplete(){
+
       let autocomplete = new google.maps.places.Autocomplete(
           document.getElementById('city'), {
             types: ['(cities)'],
           });
-      autocomplete.addListener('place_changed', () => console.log("Autocomplete"));
+      // autocomplete.addListener('place_changed', () => {});
     }
 
 
