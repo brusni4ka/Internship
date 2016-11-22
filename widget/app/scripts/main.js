@@ -15,6 +15,7 @@
   var pluginName = "WeatheWidget";
   //optional data that set automaticly via first initialisation
   var defaults = {
+    cityId:'',
     city: '',
     units: '',
     apikey: 'd934a70081a5cef84dd9dcbf3c0412ed',
@@ -25,25 +26,28 @@
 
   var timeOut = {widgetId: '', clockId: '', time: ''};
 
-
   // The actual plugin constructor
   function Plugin(element, options) {
+    //root element
     this.element = element;
+    this.activeSlide = '';
     this.settings = $.extend({}, defaults, options);
     this._name = pluginName;
     //key
     this.storage = 'weatheWidget';
     this.weatherData = {
+      cityId: '',
       city: '',
       state: '',
       units: '',
       descr: '',
       temp: '',
+      tempF: '',
       speed: '',
       pressure: '',
       humidity: '',
       imgUrl: '',
-      time: ''
+      time: '',
     };
 
     this.init();
@@ -55,9 +59,7 @@
     init: function () {
 
       //If we have data in storage, we initialize widget with that data
-      if (this.setSettingFromStorage()) {
-        this.updateWidget();
-      } else {
+      if (!this.setSettingFromStorage()) {
         //We initialize widget with global data
         this.setSettingsByDefault()
             .then(()=>this.updateWidget());
@@ -65,32 +67,56 @@
       this.registerEvents();
     },
 
-
     //combine function chane;
     runWidget(){
-      console.log('in run');
+
       this.getWeather()
           .then((response) => {
-        this.setData(this.weatherData, response.weather);
+        Object.assign(this.settings, { cityId: response.weather.cityId});
+      Object.assign(this.weatherData, response.weather);
       return this.getTimeZone(response.coord)
     })
     .then((zone)=> {
         let time = this.getTime(zone);
-      this.setData(this.weatherData, {time: time});
+      Object.assign(this.settings, { timezone: zone});
+      Object.assign(this.weatherData, {time: time});
     })
     .then(()=> {
-        this.renderWidget(this.weatherData);
+        if (!this.isNewCityId(this.weatherData.cityId)) {
+        return false;
+      }
+      //setting data only to the active widget
+      //setting active slide
+
+      this.renderNewSlide();
+      this.renderWidget(this.weatherData);
+      this.renderUnits(this.weatherData);
+      this.renderSlider();
       this.renderDay();
       this.updateTime();
       this.addAutocomplete();
     });
     },
 
-    updateWidget(){
-      //update in an hour
-      let delay = (60 - (new Date().getMinutes())) * 60000;
-      this.runWidget();
 
+    //check if it's new city
+    isNewCityId(id){
+      let fl = true;
+      $(this.element).find('.location').each(function () {
+        debugger;
+        if ($(this).data("ci") == id) {
+          fl = false;
+        }
+      });
+      return fl;
+    },
+
+    updateWidget(settings){
+      //update in an hour
+
+      let delay = (60 - (new Date().getMinutes())) * 60000;
+
+      this.runWidget();
       if (timeOut.widgetId) {
         clearTimeout(parseInt(timeOut.widgetId));
       }
@@ -105,31 +131,35 @@
     },
 
     getWeather () {
+
       //Getting the weather data from the open weather API
-      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings.city}&appid=${this.settings.apikey}&units=${this.settings.units}`;
+      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings.city}&appid=${this.settings.apikey}&units=metric`;
       console.log('1', weatherUrl);
-      let promise = $.Deferred();
-      $.ajax(weatherUrl, {
-        success(response){
-          promise.resolve({
-            weather: {
-              city: response.name,
-              state: response.sys.country,
-              descr: response.weather[0].description,
-              temp: response.main.temp,
-              humidity: response.main.humidity,
-              pressure: response.main.pressure,
-              speed: response.wind.speed,
-              imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png',
-            },
-            coord: {
-              lat: response.coord.lat,
-              lon: response.coord.lon
-            }
-          });
-        }
-      });
-      return promise;
+      console.dir(this.settings);
+
+      return new Promise((resolve, reject) => {
+            $.getJSON(weatherUrl)
+              .done(function (response) {
+                resolve({
+                  weather: {
+                    cityId: response.id,
+                    city: response.name,
+                    state: response.sys.country,
+                    descr: response.weather[0].description,
+                    tempC: response.main.temp,
+                    tempF: response.main.temp * 9 / 5 + 32,
+                    humidity: response.main.humidity,
+                    pressure: response.main.pressure,
+                    speed: response.wind.speed,
+                    imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png'
+                  },
+                  coord: {
+                    lat: response.coord.lat,
+                    lon: response.coord.lon
+                  }
+                });
+              });
+    });
     },
 
     getTime(zone){
@@ -139,19 +169,18 @@
 
     },
 
-
     getTimeZone(geodatas){
       let timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?` +
           `location=${geodatas.lat},${geodatas.lon}&timestamp=1331161200&key=${this.settings.gtimezonekey}`;
       console.log('2', timezoneUrl);
-      let promise = $.Deferred();
-      $.ajax(timezoneUrl, {
-            success: (data)=> {
-            console.log('2', data.timeZoneId);
-      promise.resolve(data.timeZoneId);
-    }
+
+      return new Promise((resolve, reject) => {
+            $.getJSON(timezoneUrl)
+              .done(function (data) {
+                console.log('2', data.timeZoneId);
+                resolve(data.timeZoneId);
+              });
     });
-      return promise;
     },
 
     updateTime(delayTime){
@@ -184,97 +213,140 @@
       console.dir(delay);
     },
 
-    renderWidget (dataWeather) {//render from string
-      console.dir(4, 'renderWidget', dataWeather);
-      let ischecked = this.settings.remember ? 'checked' : '';
-      let activeUnit = this.settings.units;
-      let metric = 'metric' === activeUnit ? 'active' : '';
-      let imperial = 'imperial' === activeUnit ? 'active' : '';
-      let buttonts = `
-                  <button id="C" data-unit="metric" class="${metric}">&#176C</button>
-                  <button id="F" data-unit="imperial" class="${imperial}">&#176F</button>`;
+    renderNewSlide(){
+      if (!this.activeSlide)return;
+      if (this.activeSlide.hasClass('pin')) {
+        let length = $(this.element).find('.slider').children().length;
+        $(`<div class="slide weather_${length}">`).append($('.slide').html()).appendTo('.slider');
+        this.activeSlide = $(`.slide.weather_${length}`);
+        console.log(this.activeSlide);
+        // $(this.element).find('.slider-pagi__elem').trigger('click');
+      }
+    },
 
+    renderWidget (dataWeather) {
+      //render from string
+      debugger;
+      console.log("renderWidget");
+      console.log(dataWeather);
+      let ischecked = this.settings.remember ? 'checked' : '';
       let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
               <div class="weather">
                 <div class="descr">${dataWeather.descr}</div>
-                <div class="temp">${dataWeather.temp}</div>
+                <div class="temp"></div>
                 <div class="other-inf">
                   <span class="humidity">${dataWeather.humidity}&#176;</span>
                   <span class="pressure">${dataWeather.pressure}&#176;</span>
-                </div>
+   render             </div>
                 <span class="wind">Winds: ${dataWeather.speed} MPH</span>
               </div>`;
       let template =
           `
-          <div class="widget">
-            <div class="visual">
-              <div class="bg-wrap">
-                <div class="circle-day"></div>
-              </div>
-              <svg version="1.1" id="L3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-                <circle fill="#FFDB4D"  cx="0" cy="100%" r="12" >
-                 
-                  <animateTransform
-                    attributeName="transform"
-                    dur="5s"
-                    type="rotate"
-                    from="0 50 70"
-                    to="180 50 72"
-                    fill="freeze" 
-                    />
-                    
-                </circle>
-              </svg>
-            </div>
-            <div class="info">
-              <div class="btn-holder">
-                <a href="#" class="rounded-btn"></a>
-              </div>
-              <div class="search-holder">
-                <div class="capture">
-                  <form class="search-form">
-                    <div class="div">
-                      <label for="city">Weather in ...</label>
-                      <input id="city" type="text" placeholder="">
+       <div class="widget">
+            <ul class="slider-pagi"></ul>
+            <div class="slider">
+              <div class="slide weather_0">
+                 <div class="visual">
+                  <div class="bg-wrap">
+                    <div class="circle-day"></div>
+                  </div>
+                  <svg class='sun' version="1.1" id="L3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+                    <circle fill="#FFDB4D"  cx="-20" cy="100%" r="12" >
+                     
+                      <animateTransform
+                        attributeName="transform"
+                        dur="1s"
+                        type="rotate"
+                        fill="freeze" 
+                        />
+                    </circle>
+                  </svg>
+                </div>
+                <div class="info">
+                  <div class="btn-holder">
+                    <a href="#" class="rounded-btn"></a>
+                  </div>
+                  <div class="search-holder">
+                    <div class="capture">
+                      <form class="search-form">
+                        <div class="div">
+                          <label for="city">Weather in ...</label>
+                          <input class="city" type="text" placeholder="">
+                        </div>
+                      </form>
+                      <div class="buttons">
+                      <!--buttons go here-->
+                      </div>
                     </div>
-                  </form>
-                  <div class="buttons">
-                  <!--buttons go here-->
+                    <div class="remember">
+                      <label for="remember">remember me</label>
+                      <input id="remember" type="checkbox" ${ischecked}>
+                    </div>
+                    <span class="arrow"></span>
+                  </div>
+                  <div class="geo-info">
+                    <div class="clock" data-time="">
+                      <div class="minutes-container">
+                        <div class="minutes"></div>
+                      </div>
+                      <div class="hours-container">
+                        <div class="hours"></div>
+                      </div>
+                    </div>
+                    <span class="location"></span>
+                  </div>
+          
+                  <div class="meteo-info">
                   </div>
                 </div>
-                <div class="remember">
-                  <label for="remember">remember me</label>
-                  <input id="remember" type="checkbox" ${ischecked}>
-                </div>
-              </div>
-              <div class="geo-info">
-                <div class="clock" data-time="">
-                  <div class="minutes-container">
-                    <div class="minutes"></div>
-                  </div>
-                  <div class="hours-container">
-                    <div class="hours"></div>
-                  </div>
-                </div>
-                <span class="location"></span>
-              </div>
-      
-              <div class="meteo-info">
-              </div>
-            </div>
+              </div>  
+            </div><!--end slider-->
           </div>
           `;
 
       if (!$(this.element).hasClass('done')) {
         $(this.element).html(template);
         $(this.element).addClass('done');
+        $(this.element).find('.slide').addClass('active')
       }
 
-      $(this.element).find('.location').html(`${dataWeather.city}, ${dataWeather.state}`);
-      $(this.element).find('.buttons').html(buttonts);
-      $(this.element).find('.meteo-info').html(meteo_info);
-      $(this.element).find('.temp').each(function () {
+      this.activeSlide = this.activeSlide || $('.slide.active');
+      if(ischecked){
+        this.activeSlide.addClass('pin');
+      }
+      console.log(this.activeSlide);
+      this.activeSlide.find('.location')
+          .html(`${dataWeather.city}, ${dataWeather.state}`)
+          .attr("data-ci", dataWeather.cityId);
+
+      this.activeSlide.find('.meteo-info').html(meteo_info);
+    },
+
+    renderUnits(dataWeather){
+      /*  this.activeSlide = $('.slide.active');*/
+      console.log(this.activeSlide, 'renderUnits');
+      let activeUnit = this.settings.units;
+      let metric;
+      let imperial;
+      let temp;
+      if ('metric' === activeUnit) {
+        metric = 'active';
+        imperial = '';
+        temp = dataWeather.tempC;
+      } else {
+        metric = '';
+        imperial = 'active';
+        temp = dataWeather.tempF;
+      }
+
+      let buttonts = `
+                  <button id="C" data-unit="metric" class="${metric}">&#176C</button>
+                  <button id="F" data-unit="imperial" class="${imperial}">&#176F</button>`;
+
+      this.activeSlide.find('.buttons').html(buttonts);
+      this.activeSlide.find('.temp').html(temp);
+      this.activeSlide.find('.temp').each(function () {
 
         $(this).prop('counter', 0).animate({
           counter: $(this).text()
@@ -289,19 +361,58 @@
       });
     },
 
+    renderSlider(){
+      let slider = $(this.element).find('.slider');
+      let pagination = $(this.element).find(".slider-pagi");
+      let numOfSlides = slider.children().length - 1;
+      let elementWidth = $(this.element).find('.slide').width();
+      let curSlide = 0;
+      let animating = false;
+      let diff = 0;
+
+      function createBullets() {
+        pagination.html('');
+        for (let i = 0; i < numOfSlides + 1; i++) {
+          let li = $("<li class='slider-pagi__elem'></li>");
+          li.addClass("slider-pagi__elem-" + i).attr("data-page", i);
+          if (!i) li.addClass("active");
+          pagination.append(li);
+        }
+      }
+
+      createBullets();
+
+      function changeSlides() {
+        animating = true;
+        slider.addClass("animating");
+        $(".slide").removeClass("active");
+        $(`.weather_${curSlide}`).addClass("active");
+        $(".slider-pagi__elem").removeClass("active");
+        $(".slider-pagi__elem-" + curSlide).addClass("active");
+        slider.css("transform", "translateX(" + -curSlide * elementWidth + "px)");
+        diff = 0;
+      }
+
+      $(this.element).on("click", ".slider-pagi__elem", function () {
+        curSlide = $(this).data("page");
+        changeSlides();
+      });
+
+    },
 
     renderDay(){
       let time = this.weatherData.time;
       let hours = moment(time).hours();
       let dayClass = '';
 
-      console.log(hours);
+      let sun_angle = (hours - 9) * 30;
+      //console.log(sun_angle);
 
       let dayElements = [
         $(this.element),
-        $(this.element).find('.circle-day'),
-        $(this.element).find('.bg-wrap'),
-        $(this.element).find('.visual')
+        this.activeSlide.find('.circle-day'),
+        this.activeSlide.find('.bg-wrap'),
+        this.activeSlide.find('.visual')
 
       ];
 
@@ -328,6 +439,11 @@
 
 
       console.log(dayClass);
+      this.activeSlide.find('.sun').find('animateTransform')
+          .attr('from', `${sun_angle - 60} 50 100`)
+          .attr('to', `${sun_angle} 50 100`)
+
+      console.log($(this.element).find('.sun').find('animateTransform').attr('to'))
       dayElements.forEach((el)=> {
         dayList.forEach((day)=> {
         el.removeClass(day);
@@ -338,7 +454,8 @@
     },
 
     renderClock(time){
-      $(this.element).find('.clock').attr('data-time', time.time);
+
+      this.activeSlide.find('.clock').attr('data-time', time.time);
       //render
       let hands = [
         {
@@ -358,56 +475,80 @@
           }
       )
     })
-
     },
 
     registerEvents () {
+      $(this.element).on('submit', '.search-form', this, function (event) {
+        let _this = event.data;
+        let city = $(this).find('input').val();
+        event.preventDefault();
+        _this.setSettings({city: city});
+        //Render new slide If current has remember(pin) state
+        _this.updateWidget();
+      });
 
-      $(this.element).on('submit', '.search-form', (event)=> {
-        let city = $('input').val();
-      event.preventDefault();
-      this.setSettings({city: city});
-      this.updateWidget();
-    });
+      $(this.element).on('click', 'button', this, function (event) {
+        let _this = event.data;
+        let unit = $(event.target).data('unit');
+        _this.setSettings({units: unit});
+        _this.renderUnits(_this.weatherData);
+      });
 
-      $(this.element).on('click', 'button', (el)=> {
-        console.log("I'm here button");
-      console.log(this);
-      let unit = $(el.target).data('unit');
-      this.setSettings({units: unit});
-      this.updateWidget();
-    });
       //setting data to local storage
-      $(this.element).on("change", "#remember:checkbox", ()=> {
-        if ($("#remember").is(':checked')) {
-        this.setSettings({'remember': true});
-        this.setToLocalStorage(this.settings);
-        return;
-      }
-      this.setSettings({'remember': false});
-      this.clearLocalStorage();
-    });
+      $(this.element).on("change", "#remember:checkbox", this, function (event) {
+        let _this = event.data;
+        let elem = $(event.target);
+        if ($(event.target).is(':checked')) {
+          elem.closest('.slide').addClass('pin');
+          _this.setSettings({'remember': true});
+          _this.setToLocalStorage( _this.settings);
+        } else {
+          elem.closest('.slide').removeClass('pin');
+          _this.setSettings({'remember': false});
+          let id = _this.weatherData.cityId;
+          _this.clearLocalStorage(id);
+        }
+      });
 
       $(this.element).on("click", ".rounded-btn", (event)=> {
-        $('.search-holder').slideToggle(1200);
+        event.preventDefault();
+      $(this.element).find('.slide.active').find('.search-holder').slideToggle(1200);
     });
 
-
-      //this.addAutocomplete();
-
+      $(this.element).on("click", ".arrow", ()=> {
+        $(this).toggleClass("open");
+      $(this.element).find('.slide.active').find('.remember').animate({
+        height: 'toggle'
+      });
+    });
     },
 
     setToLocalStorage(data){
+
       if (typeof(Storage) === "undefined")return;
-      localStorage.setItem(this.storage, JSON.stringify(data));
+      console.log(localStorage);
+
+      let a = JSON.parse(localStorage.getItem(this.storage)) || [];
+      debugger;
+      /*  /!*  let isNew = a.some((el)=>{
+       return  Object.keys(el)[0] == key
+       });*!/
+       if(!isNew)return;*/
+      a.push(data);
+      localStorage.clear(this.storage);
+      localStorage.setItem(this.storage, JSON.stringify(a));
+      console.log(a)
     },
 
-    clearLocalStorage(){
-      localStorage.removeItem(this.storage);
-    },
-
-    setData(template, data){
-      return Object.assign(template, data);
+    clearLocalStorage(id){
+      debugger;
+      let a = JSON.parse(localStorage.getItem(this.storage));
+      a = a.filter((el)=> {
+            return el.cityId!=id;
+    });
+      localStorage.clear(this.storage);
+      localStorage.setItem(this.storage, JSON.stringify(a));
+      console.log(localStorage.getItem(this.storage));
     },
 
     setSettings(data)  {
@@ -416,6 +557,7 @@
 
     //sets global data from api
     setSettingsByDefault(){
+      console.log('from storage');
       return new Promise((resolve, reject)=> {
             this.getLocation().then((data)=> {
             let globalData = {
@@ -430,23 +572,26 @@
           }
         }
       }
-      console.log('1', this.settings);
       resolve(this.settings);
     });
     })
     },
 
     setSettingFromStorage(){
-      if (localStorage.getItem(this.storage)) {
-        this.setSettings(JSON.parse(localStorage.getItem(this.storage)));
-        return true;
+      debugger;
+      let _that = this;
+      if (!localStorage.getItem(this.storage))return false;
+      console.log('from storage');
+
+      let settings = JSON.parse(localStorage.getItem(this.storage));
+      console.dir(settings);
+      for (let i = 0, l = settings.length; i < l; i++) {
+
+        _that.setSettings(settings[i]);
+        _that.updateWidget();
       }
-      return false;
     },
 
-    /*   getWeatherUrl(data){//vtopku
-     return `http://api.openweathermap.org/data/2.5/weather?q=${data.city}&appid=${data.apikey}&units=${data.units}`;
-     },*/
 
     getLocation(){
       return new Promise((resolve, reject) => {
@@ -457,15 +602,13 @@
     });
     },
 
-
     //additional features
     addAutocomplete(){
-
       let autocomplete = new google.maps.places.Autocomplete(
-          document.getElementById('city'), {
-            types: ['(cities)'],
+          document.getElementsByClassName('city')[0], {
+            types: ['(cities)']
           });
-      // autocomplete.addListener('place_changed', () => {});
+      //autocomplete.addListener('place_changed', () => {});
     }
 
 
