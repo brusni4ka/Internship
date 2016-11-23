@@ -10,16 +10,17 @@
 
   "use strict";
 
-
-  // Create the defaults once
   var pluginName = "WeatheWidget";
-  //optional data that set automaticly via first initialisation
+
+  var apiKeys = {
+    weatherkey: 'd934a70081a5cef84dd9dcbf3c0412ed',
+    gtimezonekey: 'AIzaSyBqO6Eblf3EeVW59nndnsXOjrdYtrFrIFU'
+  };
+
   var defaults = {
     cityId:'',
     city: '',
-    units: '',
-    apikey: 'd934a70081a5cef84dd9dcbf3c0412ed',
-    gtimezonekey: 'AIzaSyBqO6Eblf3EeVW59nndnsXOjrdYtrFrIFU',
+    units: 'metric',
     remember: '',
     timezone: ''
   };
@@ -28,13 +29,21 @@
 
   // The actual plugin constructor
   function Plugin(element, options) {
+
+    this.name = pluginName;
     //root element
     this.element = element;
     this.activeSlide = '';
-    this.settings = $.extend({}, defaults, options);
-    this._name = pluginName;
-    //key
-    this.storage = 'weatheWidget';
+
+    //contains a list of settings
+    this.settings = [$.extend({}, defaults, options)];
+
+    //Temporary contains a link on active settings object
+    this.temp_settings = [];
+    //Local Storage key
+    this.storage = 'weatherWidget';
+
+    //Dynamic data for rendering
     this.weatherData = {
       cityId: '',
       city: '',
@@ -47,9 +56,8 @@
       pressure: '',
       humidity: '',
       imgUrl: '',
-      time: '',
+      time: ''
     };
-
     this.init();
   }
 
@@ -57,13 +65,20 @@
   $.extend(Plugin.prototype, {
 
     init: function () {
-
+      console.log(this.settings);
       //If we have data in storage, we initialize widget with that data
-      if (!this.setSettingFromStorage()) {
-        //We initialize widget with global data
-        this.setSettingsByDefault()
-            .then(()=>this.updateWidget());
-      }
+      /*     if (!this.setSettingFromStorage()) {
+       //We initialize widget with global data
+       this.setSettingsByDefault()
+       .then(()=>this.updateWidget());
+       }*/
+
+      this.setSettingsByDefault()
+          .then(()=>{
+        //copy link
+        this.temp_settings = this.settings[0];
+      this.updateWidget()
+    });
       this.registerEvents();
     },
 
@@ -72,13 +87,13 @@
 
       this.getWeather()
           .then((response) => {
-        Object.assign(this.settings, { cityId: response.weather.cityId});
+        Object.assign(this.temp_settings, { cityId: response.weather.cityId});
       Object.assign(this.weatherData, response.weather);
       return this.getTimeZone(response.coord)
     })
     .then((zone)=> {
         let time = this.getTime(zone);
-      Object.assign(this.settings, { timezone: zone});
+      Object.assign(this.temp_settings, { timezone: zone});
       Object.assign(this.weatherData, {time: time});
     })
     .then(()=> {
@@ -87,11 +102,9 @@
       }
       //setting data only to the active widget
       //setting active slide
-
-      this.renderNewSlide();
+      // this.renderNewSlide();
       this.renderWidget(this.weatherData);
       this.renderUnits(this.weatherData);
-      this.renderSlider();
       this.renderDay();
       this.updateTime();
       this.addAutocomplete();
@@ -111,12 +124,14 @@
       return fl;
     },
 
-    updateWidget(settings){
+    updateWidget(){
+      let i = parseInt($('.slider').attr('data-active')) || 0;
+      this.temp_settings = this.settings[i];
+
       //update in an hour
-
       let delay = (60 - (new Date().getMinutes())) * 60000;
-
       this.runWidget();
+
       if (timeOut.widgetId) {
         clearTimeout(parseInt(timeOut.widgetId));
       }
@@ -133,7 +148,7 @@
     getWeather () {
 
       //Getting the weather data from the open weather API
-      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings.city}&appid=${this.settings.apikey}&units=metric`;
+      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.temp_settings.city}&appid=${apiKeys.weatherkey}&units=metric`;
       console.log('1', weatherUrl);
       console.dir(this.settings);
 
@@ -171,7 +186,7 @@
 
     getTimeZone(geodatas){
       let timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?` +
-          `location=${geodatas.lat},${geodatas.lon}&timestamp=1331161200&key=${this.settings.gtimezonekey}`;
+          `location=${geodatas.lat},${geodatas.lon}&timestamp=1331161200&key=${apiKeys.gtimezonekey}`;
       console.log('2', timezoneUrl);
 
       return new Promise((resolve, reject) => {
@@ -214,22 +229,25 @@
     },
 
     renderNewSlide(){
+      debugger;
       if (!this.activeSlide)return;
       if (this.activeSlide.hasClass('pin')) {
         let length = $(this.element).find('.slider').children().length;
         $(`<div class="slide weather_${length}">`).append($('.slide').html()).appendTo('.slider');
         this.activeSlide = $(`.slide.weather_${length}`);
         console.log(this.activeSlide);
-        // $(this.element).find('.slider-pagi__elem').trigger('click');
       }
+      console.log(length);
+      this.renderSlider(length);
     },
 
     renderWidget (dataWeather) {
       //render from string
-      debugger;
       console.log("renderWidget");
       console.log(dataWeather);
-      let ischecked = this.settings.remember ? 'checked' : '';
+      console.log("Setting");
+      console.log(this.settings);
+      let ischecked = this.temp_settings.remember ? 'checked' : '';
       let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
               <div class="weather">
                 <div class="descr">${dataWeather.descr}</div>
@@ -244,7 +262,7 @@
           `
        <div class="widget">
             <ul class="slider-pagi"></ul>
-            <div class="slider">
+            <div class="slider" data-active="0">
               <div class="slide weather_0">
                  <div class="visual">
                   <div class="bg-wrap">
@@ -326,7 +344,7 @@
     renderUnits(dataWeather){
       /*  this.activeSlide = $('.slide.active');*/
       console.log(this.activeSlide, 'renderUnits');
-      let activeUnit = this.settings.units;
+      let activeUnit = this.temp_settings.units;
       let metric;
       let imperial;
       let temp;
@@ -362,6 +380,7 @@
     },
 
     renderSlider(){
+
       let slider = $(this.element).find('.slider');
       let pagination = $(this.element).find(".slider-pagi");
       let numOfSlides = slider.children().length - 1;
@@ -369,6 +388,7 @@
       let curSlide = 0;
       let animating = false;
       let diff = 0;
+
 
       function createBullets() {
         pagination.html('');
@@ -379,12 +399,11 @@
           pagination.append(li);
         }
       }
-
       createBullets();
-
       function changeSlides() {
         animating = true;
         slider.addClass("animating");
+        slider.attr('data-active', curSlide);
         $(".slide").removeClass("active");
         $(`.weather_${curSlide}`).addClass("active");
         $(".slider-pagi__elem").removeClass("active");
@@ -398,6 +417,7 @@
         changeSlides();
       });
 
+      $(`.slider-pagi__elem-${numOfSlides}`).trigger("click")
     },
 
     renderDay(){
@@ -413,7 +433,6 @@
         this.activeSlide.find('.circle-day'),
         this.activeSlide.find('.bg-wrap'),
         this.activeSlide.find('.visual')
-
       ];
 
       let dayList = [
@@ -480,9 +499,23 @@
     registerEvents () {
       $(this.element).on('submit', '.search-form', this, function (event) {
         let _this = event.data;
+        let elem = $(event.target);
         let city = $(this).find('input').val();
         event.preventDefault();
+
+        debugger;
+        if(elem.closest('.slide').hasClass('pin')){
+          debugger;
+          _this.settings.push(defaults);
+          //From now we link on last new element
+          _this.temp_settings = _this.settings[_this.settings.length-1];
+        }
+        //new setting element
         _this.setSettings({city: city});
+
+        let i = _this.settings.indexOf(_this.temp_settings);
+        _this.renderNewSlide();
+
         //Render new slide If current has remember(pin) state
         _this.updateWidget();
       });
@@ -552,23 +585,26 @@
     },
 
     setSettings(data)  {
-      return Object.assign(this.settings, data);
+      debugger;
+      //let i =  parseInt($(this.element).find('.slide').attr('data-active')|| 0 );
+      return Object.assign(this.temp_settings, data);
     },
 
-    //sets global data from api
+    //sets global location data from api
     setSettingsByDefault(){
-      console.log('from storage');
       return new Promise((resolve, reject)=> {
             this.getLocation().then((data)=> {
             let globalData = {
               city: data.city,
-              units: 'metric',
               timezone: data.timezone
             };
-      for (var key in this.settings) {
-        if (this.settings.hasOwnProperty(key)) {
-          if (!this.settings[key]) {
-            this.settings[key] = globalData[key];
+
+      //To Prevent from setting empty value
+      //this.settings[0] - First element contain default state
+      for (var key in this.settings[0]) {
+        if (this.settings[0].hasOwnProperty(key)) {
+          if (!this.settings[0][key]) {
+            this.settings[0][key] = globalData[key];
           }
         }
       }
@@ -586,7 +622,6 @@
       let settings = JSON.parse(localStorage.getItem(this.storage));
       console.dir(settings);
       for (let i = 0, l = settings.length; i < l; i++) {
-
         _that.setSettings(settings[i]);
         _that.updateWidget();
       }
