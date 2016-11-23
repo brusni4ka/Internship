@@ -35,11 +35,13 @@
     this.element = element;
     this.activeSlide = '';
 
-    //contains a list of settings
-    this.settings = [$.extend({}, defaults, options)];
+    //Dynamic settings
+    this.settings = Object.assign($.extend({}, defaults, options));
 
-    //Temporary contains a link on active settings object
-    this.temp_settings = [];
+    //Contains a list of setting;
+    this.settings_list = [Object.assign({}, this.settings)];
+    this.settings_list[0] = this.settings;
+
     //Local Storage key
     this.storage = 'weatherWidget';
 
@@ -75,9 +77,7 @@
 
       this.setSettingsByDefault()
           .then(()=>{
-        //copy link
-        this.temp_settings = this.settings[0];
-      this.updateWidget()
+        this.updateWidget()
     });
       this.registerEvents();
     },
@@ -87,13 +87,13 @@
 
       this.getWeather()
           .then((response) => {
-        Object.assign(this.temp_settings, { cityId: response.weather.cityId});
+        Object.assign(this.settings, { cityId: response.weather.cityId});
       Object.assign(this.weatherData, response.weather);
       return this.getTimeZone(response.coord)
     })
     .then((zone)=> {
         let time = this.getTime(zone);
-      Object.assign(this.temp_settings, { timezone: zone});
+      Object.assign(this.settings, { timezone: zone});
       Object.assign(this.weatherData, {time: time});
     })
     .then(()=> {
@@ -108,6 +108,8 @@
       this.renderDay();
       this.updateTime();
       this.addAutocomplete();
+      console.log("settings_list");
+      console.log(this.settings_list);
     });
     },
 
@@ -125,8 +127,8 @@
     },
 
     updateWidget(){
-      let i = parseInt($('.slider').attr('data-active')) || 0;
-      this.temp_settings = this.settings[i];
+      /* let i = parseInt($('.slider').attr('data-active')) || 0;
+       this.temp_settings = this.settings[i];*/
 
       //update in an hour
       let delay = (60 - (new Date().getMinutes())) * 60000;
@@ -146,9 +148,8 @@
     },
 
     getWeather () {
-
       //Getting the weather data from the open weather API
-      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.temp_settings.city}&appid=${apiKeys.weatherkey}&units=metric`;
+      let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings.city}&appid=${apiKeys.weatherkey}&units=metric`;
       console.log('1', weatherUrl);
       console.dir(this.settings);
 
@@ -247,7 +248,7 @@
       console.log(dataWeather);
       console.log("Setting");
       console.log(this.settings);
-      let ischecked = this.temp_settings.remember ? 'checked' : '';
+      let ischecked = this.settings.remember ? 'checked' : '';
       let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
               <div class="weather">
                 <div class="descr">${dataWeather.descr}</div>
@@ -333,6 +334,7 @@
       if(ischecked){
         this.activeSlide.addClass('pin');
       }
+      debugger;
       console.log(this.activeSlide);
       this.activeSlide.find('.location')
           .html(`${dataWeather.city}, ${dataWeather.state}`)
@@ -342,9 +344,9 @@
     },
 
     renderUnits(dataWeather){
-      /*  this.activeSlide = $('.slide.active');*/
+      this.activeSlide = $('.slide.active');
       console.log(this.activeSlide, 'renderUnits');
-      let activeUnit = this.temp_settings.units;
+      let activeUnit = this.settings.units;
       let metric;
       let imperial;
       let temp;
@@ -411,9 +413,20 @@
         slider.css("transform", "translateX(" + -curSlide * elementWidth + "px)");
         diff = 0;
       }
-
-      $(this.element).on("click", ".slider-pagi__elem", function () {
+      $(this.element).on("click", ".slider-pagi__elem", this, function (event) {
         curSlide = $(this).data("page");
+        let _that = event.data;
+        debugger;
+        if(_that.settings_list[curSlide]){
+          if(!_that.settings_list[numOfSlides]){
+            _that.settings_list.push(Object.assign({},_that.settings));
+            console.log(_that.settings_list);
+          }
+          // if we already have this element in remember state, make a link on it's settings
+          _that.settings = _that.settings_list[curSlide];
+          console.log(_that.settings_list[curSlide]);
+        }
+
         changeSlides();
       });
 
@@ -456,13 +469,10 @@
         dayClass = 'night';
       }
 
-
-      console.log(dayClass);
       this.activeSlide.find('.sun').find('animateTransform')
           .attr('from', `${sun_angle - 60} 50 100`)
-          .attr('to', `${sun_angle} 50 100`)
+          .attr('to', `${sun_angle} 50 100`);
 
-      console.log($(this.element).find('.sun').find('animateTransform').attr('to'))
       dayElements.forEach((el)=> {
         dayList.forEach((day)=> {
         el.removeClass(day);
@@ -498,24 +508,27 @@
 
     registerEvents () {
       $(this.element).on('submit', '.search-form', this, function (event) {
+
         let _this = event.data;
         let elem = $(event.target);
         let city = $(this).find('input').val();
         event.preventDefault();
 
         debugger;
+
         if(elem.closest('.slide').hasClass('pin')){
-          debugger;
-          _this.settings.push(defaults);
-          //From now we link on last new element
-          _this.temp_settings = _this.settings[_this.settings.length-1];
+
+          //new element
+          _this.settings_list.push(Object.assign( {}, defaults));
+          _this.settings = _this.settings_list[_this.settings_list.length-1];
+          _this.setSettings(defaults);
+
         }
         //new setting element
+
         _this.setSettings({city: city});
 
-        let i = _this.settings.indexOf(_this.temp_settings);
         _this.renderNewSlide();
-
         //Render new slide If current has remember(pin) state
         _this.updateWidget();
       });
@@ -534,12 +547,12 @@
         if ($(event.target).is(':checked')) {
           elem.closest('.slide').addClass('pin');
           _this.setSettings({'remember': true});
-          _this.setToLocalStorage( _this.settings);
+          //  _this.setToLocalStorage( _this.settings);
         } else {
           elem.closest('.slide').removeClass('pin');
           _this.setSettings({'remember': false});
           let id = _this.weatherData.cityId;
-          _this.clearLocalStorage(id);
+          //_this.clearLocalStorage(id);
         }
       });
 
@@ -586,8 +599,9 @@
 
     setSettings(data)  {
       debugger;
-      //let i =  parseInt($(this.element).find('.slide').attr('data-active')|| 0 );
-      return Object.assign(this.temp_settings, data);
+      // let i =  parseInt($(this.element).find('.slide').attr('data-active'));
+
+      return Object.assign(this.settings, data);
     },
 
     //sets global location data from api
@@ -600,11 +614,10 @@
             };
 
       //To Prevent from setting empty value
-      //this.settings[0] - First element contain default state
-      for (var key in this.settings[0]) {
-        if (this.settings[0].hasOwnProperty(key)) {
-          if (!this.settings[0][key]) {
-            this.settings[0][key] = globalData[key];
+      for (var key in this.settings) {
+        if (this.settings.hasOwnProperty(key)) {
+          if (!this.settings[key]) {
+            this.settings[key] = globalData[key];
           }
         }
       }
