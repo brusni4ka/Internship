@@ -67,24 +67,27 @@
   $.extend(Plugin.prototype, {
 
     init: function () {
-      console.log(this.settings);
       //If we have data in storage, we initialize widget with that data
-      /*     if (!this.setSettingFromStorage()) {
-       //We initialize widget with global data
-       this.setSettingsByDefault()
-       .then(()=>this.updateWidget());
-       }*/
-
-      this.setSettingsByDefault()
-          .then(()=>{
+      if (this.setSettingFromStorage()){
+        let len = this.settings_list.length;
+        this.renderTemplate();
+        this.renderSlides(len);
+        this.updateWidget();
+      }else{
+        //We initialize widget with global data
+        this.setSettingsByDefault()
+            .then(()=>{
+          this.renderTemplate();
+        this.renderSlides(1);
         this.updateWidget()
-    });
+      });
+      }
       this.registerEvents();
+
     },
 
     //combine function chane;
     runWidget(){
-
       this.getWeather()
           .then((response) => {
         Object.assign(this.settings, { cityId: response.weather.cityId});
@@ -98,16 +101,17 @@
     })
     .then(()=> {
         if (!this.isNewCityId(this.weatherData.cityId)) {
+
         return false;
       }
       //setting data only to the active widget
       //setting active slide
-      // this.renderNewSlide();
       this.renderWidget(this.weatherData);
       this.renderUnits(this.weatherData);
       this.renderDay();
       this.updateTime();
       this.addAutocomplete();
+      //this.renderSlider();
       console.log("settings_list");
       console.log(this.settings_list);
     });
@@ -127,8 +131,6 @@
     },
 
     updateWidget(){
-      /* let i = parseInt($('.slider').attr('data-active')) || 0;
-       this.temp_settings = this.settings[i];*/
 
       //update in an hour
       let delay = (60 - (new Date().getMinutes())) * 60000;
@@ -229,42 +231,38 @@
       console.dir(delay);
     },
 
-    renderNewSlide(){
-      debugger;
-      if (!this.activeSlide)return;
-      if (this.activeSlide.hasClass('pin')) {
-        let length = $(this.element).find('.slider').children().length;
-        $(`<div class="slide weather_${length}">`).append($('.slide').html()).appendTo('.slider');
-        this.activeSlide = $(`.slide.weather_${length}`);
-        console.log(this.activeSlide);
-      }
-      console.log(length);
-      this.renderSlider(length);
-    },
+    /* renderNewSlide(l){
+     if (!this.activeSlide)return;
+     let length = $(this.element).find('.slider').children().length;
+     if (length === this.settings_list.length)return;
+     for(var i=1; i<l; i++,length++){
+     $(`<div class="slide weather_${length}">`).append($('.slide').html()).appendTo('.slider');
+     this.activeSlide = $(`.slide.weather_${length}`);
+     }
+     this.renderSlider();
+     },*/
 
-    renderWidget (dataWeather) {
-      //render from string
-      console.log("renderWidget");
-      console.log(dataWeather);
-      console.log("Setting");
-      console.log(this.settings);
-      let ischecked = this.settings.remember ? 'checked' : '';
-      let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
-              <div class="weather">
-                <div class="descr">${dataWeather.descr}</div>
-                <div class="temp"></div>
-                <div class="other-inf">
-                  <span class="humidity">${dataWeather.humidity}&#176;</span>
-                  <span class="pressure">${dataWeather.pressure}&#176;</span>
-   render             </div>
-                <span class="wind">Winds: ${dataWeather.speed} MPH</span>
-              </div>`;
+    renderTemplate(){
+
       let template =
           `
        <div class="widget">
             <ul class="slider-pagi"></ul>
             <div class="slider" data-active="0">
-              <div class="slide weather_0">
+            </div><!--end slider-->
+          </div>`;
+
+      if (!$(this.element).hasClass('done')) {
+        $(this.element).html(template);
+        $(this.element).addClass('done');
+        // $(this.element).find('.slide').addClass('active')
+      }
+
+    },
+
+    renderSlides(count){
+      let length = $(this.element).find('.slider').children().length||0;
+      let slide=`<div class="slide">
                  <div class="visual">
                   <div class="bg-wrap">
                     <div class="circle-day"></div>
@@ -300,7 +298,7 @@
                     </div>
                     <div class="remember">
                       <label for="remember">remember me</label>
-                      <input id="remember" type="checkbox" ${ischecked}>
+                      <input id="remember" type="checkbox">
                     </div>
                     <span class="arrow"></span>
                   </div>
@@ -319,28 +317,48 @@
                   <div class="meteo-info">
                   </div>
                 </div>
-              </div>  
-            </div><!--end slider-->
-          </div>
-          `;
+              </div>`;
+      if(count){
+        for (var i=0, val=length; i< count; i++,val++){
+          $(slide).addClass(`weather_${val}`).appendTo('.slider');
+        }
+      }else{
 
-      if (!$(this.element).hasClass('done')) {
-        $(this.element).html(template);
-        $(this.element).addClass('done');
-        $(this.element).find('.slide').addClass('active')
       }
 
-      this.activeSlide = this.activeSlide || $('.slide.active');
+      this.renderSlider();
+    },
+
+    renderWidget (dataWeather) {
+      debugger;
+
+      let ischecked = this.settings.remember ? 'checked' : '';
+      let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
+              <div class="weather">
+                <div class="descr">${dataWeather.descr}</div>
+                <div class="temp"></div>
+                <div class="other-inf">
+                  <span class="humidity">${dataWeather.humidity}&#176;</span>
+                  <span class="pressure">${dataWeather.pressure}&#176;</span>
+   render             </div>
+                <span class="wind">Winds: ${dataWeather.speed} MPH</span>
+              </div>`;
+
+
+
+      this.activeSlide = $(this.element).find('.slide.active');
+
       if(ischecked){
         this.activeSlide.addClass('pin');
       }
+
       debugger;
-      console.log(this.activeSlide);
       this.activeSlide.find('.location')
           .html(`${dataWeather.city}, ${dataWeather.state}`)
           .attr("data-ci", dataWeather.cityId);
 
       this.activeSlide.find('.meteo-info').html(meteo_info);
+      this.activeSlide.find('#remember').attr(`${ischecked}`,'true');
     },
 
     renderUnits(dataWeather){
@@ -391,7 +409,6 @@
       let animating = false;
       let diff = 0;
 
-
       function createBullets() {
         pagination.html('');
         for (let i = 0; i < numOfSlides + 1; i++) {
@@ -402,6 +419,7 @@
         }
       }
       createBullets();
+
       function changeSlides() {
         animating = true;
         slider.addClass("animating");
@@ -413,10 +431,11 @@
         slider.css("transform", "translateX(" + -curSlide * elementWidth + "px)");
         diff = 0;
       }
+
       $(this.element).on("click", ".slider-pagi__elem", this, function (event) {
         curSlide = $(this).data("page");
         let _that = event.data;
-        debugger;
+
         if(_that.settings_list[curSlide]){
           if(!_that.settings_list[numOfSlides]){
             _that.settings_list.push(Object.assign({},_that.settings));
@@ -424,10 +443,14 @@
           }
           // if we already have this element in remember state, make a link on it's settings
           _that.settings = _that.settings_list[curSlide];
-          console.log(_that.settings_list[curSlide]);
+          console.log( "render slide" );
+          console.log( _that.settings );
+        }
+        changeSlides();
+        if(_that.activeSlide && _that.activeSlide.find('.location').attr('data-ci') !== _that.settings.cityId){
+          _that.updateWidget();
         }
 
-        changeSlides();
       });
 
       $(`.slider-pagi__elem-${numOfSlides}`).trigger("click")
@@ -447,6 +470,8 @@
         this.activeSlide.find('.bg-wrap'),
         this.activeSlide.find('.visual')
       ];
+
+      console.log(  this.activeSlide);
 
       let dayList = [
         'early_morning',
@@ -469,6 +494,8 @@
         dayClass = 'night';
       }
 
+
+      console.log(dayClass);
       this.activeSlide.find('.sun').find('animateTransform')
           .attr('from', `${sun_angle - 60} 50 100`)
           .attr('to', `${sun_angle} 50 100`);
@@ -507,29 +534,24 @@
     },
 
     registerEvents () {
-      $(this.element).on('submit', '.search-form', this, function (event) {
 
+      $(this.element).on('submit', '.search-form', this, function (event) {
         let _this = event.data;
         let elem = $(event.target);
         let city = $(this).find('input').val();
         event.preventDefault();
 
-        debugger;
-
         if(elem.closest('.slide').hasClass('pin')){
-
           //new element
           _this.settings_list.push(Object.assign( {}, defaults));
+          //linking on a new slide
           _this.settings = _this.settings_list[_this.settings_list.length-1];
           _this.setSettings(defaults);
-
+          _this.setSettings({city: city});
+          _this.renderSlides(1);
+        }else{
+          _this.setSettings({city: city});
         }
-        //new setting element
-
-        _this.setSettings({city: city});
-
-        _this.renderNewSlide();
-        //Render new slide If current has remember(pin) state
         _this.updateWidget();
       });
 
@@ -547,12 +569,12 @@
         if ($(event.target).is(':checked')) {
           elem.closest('.slide').addClass('pin');
           _this.setSettings({'remember': true});
-          //  _this.setToLocalStorage( _this.settings);
+          _this.setToLocalStorage( _this.settings);
         } else {
           elem.closest('.slide').removeClass('pin');
           _this.setSettings({'remember': false});
           let id = _this.weatherData.cityId;
-          //_this.clearLocalStorage(id);
+          _this.clearLocalStorage(id);
         }
       });
 
@@ -627,17 +649,12 @@
     },
 
     setSettingFromStorage(){
-      debugger;
-      let _that = this;
       if (!localStorage.getItem(this.storage))return false;
       console.log('from storage');
-
-      let settings = JSON.parse(localStorage.getItem(this.storage));
-      console.dir(settings);
-      for (let i = 0, l = settings.length; i < l; i++) {
-        _that.setSettings(settings[i]);
-        _that.updateWidget();
-      }
+      debugger;
+      this.settings_list = JSON.parse(localStorage.getItem(this.storage));
+      this.settings = this.settings_list[0];
+      return true;
     },
 
 
