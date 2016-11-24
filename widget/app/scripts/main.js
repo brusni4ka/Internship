@@ -21,7 +21,7 @@
     cityId:'',
     city: '',
     units: 'metric',
-    remember: '',
+    remember: 'false',
     timezone: ''
   };
 
@@ -77,10 +77,10 @@
         //We initialize widget with global data
         this.setSettingsByDefault()
             .then(()=>{
-          this.renderTemplate();
-        this.renderSlides(1);
-        this.updateWidget()
-      });
+              this.renderTemplate();
+              this.renderSlides(1);
+              this.updateWidget()
+            });
       }
       this.registerEvents();
 
@@ -90,31 +90,25 @@
     runWidget(){
       this.getWeather()
           .then((response) => {
-        Object.assign(this.settings, { cityId: response.weather.cityId});
-      Object.assign(this.weatherData, response.weather);
-      return this.getTimeZone(response.coord)
-    })
-    .then((zone)=> {
-        let time = this.getTime(zone);
-      Object.assign(this.settings, { timezone: zone});
-      Object.assign(this.weatherData, {time: time});
-    })
-    .then(()=> {
-        if (!this.isNewCityId(this.weatherData.cityId)) {
-
-        return false;
-      }
-      //setting data only to the active widget
-      //setting active slide
-      this.renderWidget(this.weatherData);
-      this.renderUnits(this.weatherData);
-      this.renderDay();
-      this.updateTime();
-      this.addAutocomplete();
-      //this.renderSlider();
-      console.log("settings_list");
-      console.log(this.settings_list);
-    });
+            Object.assign(this.settings, { cityId: response.weather.cityId});
+            Object.assign(this.weatherData, response.weather);
+            return this.getTimeZone(response.coord)
+          })
+          .then((zone)=> {
+            let time = this.getTime(zone);
+            Object.assign(this.settings, { timezone: zone});
+            Object.assign(this.weatherData, {time: time});
+          })
+          .then(()=> {
+            /* if (!this.isNewCityId(this.weatherData.cityId)) {
+             return false;
+             }*/
+            this.renderWidget(this.weatherData);
+            this.renderUnits(this.weatherData);
+            this.renderDay();
+            this.updateTime();
+            this.addAutocomplete();
+          });
     },
 
 
@@ -141,8 +135,8 @@
       }
 
       let id = setTimeout(()=> {
-            this.updateWidget();
-    }, delay);
+        this.updateWidget();
+      }, delay);
 
       timeOut.widgetId = id;
       timeOut.time = delay;
@@ -156,28 +150,28 @@
       console.dir(this.settings);
 
       return new Promise((resolve, reject) => {
-            $.getJSON(weatherUrl)
-              .done(function (response) {
-                resolve({
-                  weather: {
-                    cityId: response.id,
-                    city: response.name,
-                    state: response.sys.country,
-                    descr: response.weather[0].description,
-                    tempC: response.main.temp,
-                    tempF: response.main.temp * 9 / 5 + 32,
-                    humidity: response.main.humidity,
-                    pressure: response.main.pressure,
-                    speed: response.wind.speed,
-                    imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png'
-                  },
-                  coord: {
-                    lat: response.coord.lat,
-                    lon: response.coord.lon
-                  }
-                });
+        $.getJSON(weatherUrl)
+            .done(function (response) {
+              resolve({
+                weather: {
+                  cityId: response.id,
+                  city: response.name,
+                  state: response.sys.country,
+                  descr: response.weather[0].description,
+                  tempC: response.main.temp,
+                  tempF: response.main.temp * 9 / 5 + 32,
+                  humidity: response.main.humidity,
+                  pressure: response.main.pressure,
+                  speed: response.wind.speed,
+                  imgUrl: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png'
+                },
+                coord: {
+                  lat: response.coord.lat,
+                  lon: response.coord.lon
+                }
               });
-    });
+            });
+      });
     },
 
     getTime(zone){
@@ -193,12 +187,12 @@
       console.log('2', timezoneUrl);
 
       return new Promise((resolve, reject) => {
-            $.getJSON(timezoneUrl)
-              .done(function (data) {
-                console.log('2', data.timeZoneId);
-                resolve(data.timeZoneId);
-              });
-    });
+        $.getJSON(timezoneUrl)
+            .done(function (data) {
+              console.log('2', data.timeZoneId);
+              resolve(data.timeZoneId);
+            });
+      });
     },
 
     updateTime(delayTime){
@@ -222,8 +216,8 @@
 
 
       let id = setTimeout(()=> {
-            this.updateTime(60000);
-    }, delay);
+        this.updateTime(60000);
+      }, delay);
 
 
       this.weatherData.time = moment(time).add(1, 'minutes');
@@ -251,7 +245,6 @@
             <div class="slider" data-active="0">
             </div><!--end slider-->
           </div>`;
-
       if (!$(this.element).hasClass('done')) {
         $(this.element).html(template);
         $(this.element).addClass('done');
@@ -322,17 +315,15 @@
         for (var i=0, val=length; i< count; i++,val++){
           $(slide).addClass(`weather_${val}`).appendTo('.slider');
         }
-      }else{
-
       }
-
       this.renderSlider();
     },
 
     renderWidget (dataWeather) {
       debugger;
 
-      let ischecked = this.settings.remember ? 'checked' : '';
+      let ischecked = this.settings.remember;
+      console.log('ischecked',ischecked);
       let meteo_info = `<img class="weather-icon" src= "${dataWeather.imgUrl}" alt="icon">
               <div class="weather">
                 <div class="descr">${dataWeather.descr}</div>
@@ -348,20 +339,24 @@
 
       this.activeSlide = $(this.element).find('.slide.active');
 
-      if(ischecked){
+      if(ischecked==true){
         this.activeSlide.addClass('pin');
+        this.activeSlide.find('#remember').attr('checked','true');
+      }else{
+        this.activeSlide.find('#remember').removeAttr('checked');
       }
 
-      debugger;
+
       this.activeSlide.find('.location')
           .html(`${dataWeather.city}, ${dataWeather.state}`)
           .attr("data-ci", dataWeather.cityId);
 
       this.activeSlide.find('.meteo-info').html(meteo_info);
-      this.activeSlide.find('#remember').attr(`${ischecked}`,'true');
+
     },
 
     renderUnits(dataWeather){
+      debugger;
       this.activeSlide = $('.slide.active');
       console.log(this.activeSlide, 'renderUnits');
       let activeUnit = this.settings.units;
@@ -502,10 +497,10 @@
 
       dayElements.forEach((el)=> {
         dayList.forEach((day)=> {
-        el.removeClass(day);
-    });
-      el.addClass(dayClass);
-    });
+          el.removeClass(day);
+        });
+        el.addClass(dayClass);
+      });
 
     },
 
@@ -526,11 +521,11 @@
 
       hands.forEach((elem)=> {
         $('.clock').find('.' + elem.hand).css(
-          {
-            transform: 'rotateZ(' + elem.angle + 'deg)'
-          }
-      )
-    })
+            {
+              transform: 'rotateZ(' + elem.angle + 'deg)'
+            }
+        )
+      })
     },
 
     registerEvents () {
@@ -546,7 +541,7 @@
           _this.settings_list.push(Object.assign( {}, defaults));
           //linking on a new slide
           _this.settings = _this.settings_list[_this.settings_list.length-1];
-          _this.setSettings(defaults);
+          //_this.setSettings(defaults);
           _this.setSettings({city: city});
           _this.renderSlides(1);
         }else{
@@ -580,15 +575,15 @@
 
       $(this.element).on("click", ".rounded-btn", (event)=> {
         event.preventDefault();
-      $(this.element).find('.slide.active').find('.search-holder').slideToggle(1200);
-    });
+        $(this.element).find('.slide.active').find('.search-holder').slideToggle(1200);
+      });
 
       $(this.element).on("click", ".arrow", ()=> {
         $(this).toggleClass("open");
-      $(this.element).find('.slide.active').find('.remember').animate({
-        height: 'toggle'
+        $(this.element).find('.slide.active').find('.remember').animate({
+          height: 'toggle'
+        });
       });
-    });
     },
 
     setToLocalStorage(data){
@@ -597,11 +592,13 @@
       console.log(localStorage);
 
       let a = JSON.parse(localStorage.getItem(this.storage)) || [];
-      debugger;
-      /*  /!*  let isNew = a.some((el)=>{
-       return  Object.keys(el)[0] == key
-       });*!/
-       if(!isNew)return;*/
+
+      //Prevent from pushing the same data
+      let isNew = a.every((el)=>{
+        debugger;
+        return  el.cityId !== data.cityId
+      });
+      if(!isNew)return;
       a.push(data);
       localStorage.clear(this.storage);
       localStorage.setItem(this.storage, JSON.stringify(a));
@@ -609,14 +606,18 @@
     },
 
     clearLocalStorage(id){
-      debugger;
       let a = JSON.parse(localStorage.getItem(this.storage));
       a = a.filter((el)=> {
-            return el.cityId!=id;
-    });
+        return el.cityId!=id;
+      });
       localStorage.clear(this.storage);
       localStorage.setItem(this.storage, JSON.stringify(a));
       console.log(localStorage.getItem(this.storage));
+    },
+
+    countStorageElements(){
+      let a = JSON.parse(localStorage.getItem(this.storage));
+      return a.length;
     },
 
     setSettings(data)  {
@@ -629,23 +630,23 @@
     //sets global location data from api
     setSettingsByDefault(){
       return new Promise((resolve, reject)=> {
-            this.getLocation().then((data)=> {
-            let globalData = {
-              city: data.city,
-              timezone: data.timezone
-            };
+        this.getLocation().then((data)=> {
+          let globalData = {
+            city: data.city,
+            timezone: data.timezone
+          };
 
-      //To Prevent from setting empty value
-      for (var key in this.settings) {
-        if (this.settings.hasOwnProperty(key)) {
-          if (!this.settings[key]) {
-            this.settings[key] = globalData[key];
+          //To Prevent from setting empty value
+          for (var key in this.settings) {
+            if (this.settings.hasOwnProperty(key)) {
+              if (!this.settings[key]) {
+                this.settings[key] = globalData[key];
+              }
+            }
           }
-        }
-      }
-      resolve(this.settings);
-    });
-    })
+          resolve(this.settings);
+        });
+      })
     },
 
     setSettingFromStorage(){
@@ -660,11 +661,11 @@
 
     getLocation(){
       return new Promise((resolve, reject) => {
-            $.getJSON("http://ip-api.com/json")
-              .done(function (data) {
-                resolve(data);
-              });
-    });
+        $.getJSON("http://ip-api.com/json")
+            .done(function (data) {
+              resolve(data);
+            });
+      });
     },
 
     //additional features
