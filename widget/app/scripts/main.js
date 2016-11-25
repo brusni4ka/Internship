@@ -27,15 +27,6 @@
 
     var timeOut = {widget_id: '', clock_id: '', time: ''};
 
-    var autocompleteOptions = {
-        serviceUrl: "http://gd.geobytes.com/AutoCompleteCity?callback=?",
-        dataType: 'jsonp',
-        paramName: 'q',
-        transformResult: responce => 0|| {suggestions: responce},
-        minChars: 3,
-        deferRequestBy: 0
-    };
-
     // The actual plugin constructor
     function Plugin(element, options) {
 
@@ -70,6 +61,8 @@
     $.extend(Plugin.prototype, {
 
         init: function () {
+
+
             //If we have data in storage, we initialize widget with that data
             if (this.setSettingFromStorage()) {
                 let len = this.settings_list.length;
@@ -89,7 +82,7 @@
         },
 
         //combine function chane;
-        runWidget(){
+        runWidget: function () {
             this.getWeather()
                 .then((response) => {
                     Object.assign(this.settings_list[this.current_slide_num], {city_id: response.weather.city_id});
@@ -102,9 +95,6 @@
                     Object.assign(this.weather_data, {time: time});
                 })
                 .then(()=> {
-                    /* if (!this.isNewCityId(this.weather_data.city_id)) {
-                     return false;
-                     }*/
                     this.renderWidget(this.weather_data);
                     this.renderUnits(this.weather_data);
                     this.renderDay();
@@ -113,20 +103,20 @@
                 });
         },
 
-
         //check if it's new city
-        isNewCityId(id){
+        isNewCity: function (city) {
             let fl = true;
             $(this.element).find('.location').each(function () {
-                debugger;
-                if ($(this).data('ci') == id) {
+                let c = ($(this).val()).split(",").shift();
+                if (city == c) {
                     fl = false;
                 }
             });
-            return fl;
+
+            return fl
         },
 
-        updateWidget(){
+        updateWidget: function () {
 
             //update in an hour
             let delay = (60 - (new Date().getMinutes())) * 60000;
@@ -145,7 +135,7 @@
             console.dir(timeOut);
         },
 
-        getWeather () {
+        getWeather: function () {
             //Getting the weather data from the open weather API
             let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${this.settings_list[this.current_slide_num].city}&appid=${apiKeys.weather_key}&units=metric`;
 
@@ -174,17 +164,14 @@
             });
         },
 
-        getTime(zone){
-            console.log(3, 'getTime');
-            console.log(zone);
+        getTime: function (zone) {
             return moment().tz(zone);
 
         },
 
-        getTimeZone(geodatas){
+        getTimeZone: function (geodatas) {
             let timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?` +
                 `location=${geodatas.lat},${geodatas.lon}&timestamp=1331161200&key=${apiKeys.gtime_zone_key}`;
-            console.log('2', timezoneUrl);
 
             return new Promise((resolve, reject) => {
                 $.getJSON(timezoneUrl)
@@ -195,12 +182,10 @@
             });
         },
 
-        updateTime(delayTime){
+        updateTime: function (delayTime) {
 
             let time = this.weather_data.time;
             let delay = delayTime || (60000 - moment(time).seconds() * 60);
-
-            console.log(delay);
 
             if (timeOut.clock_id) {
                 clearTimeout(parseInt(timeOut.clock_id));
@@ -214,7 +199,6 @@
 
             this.renderClock(timeHolder);
 
-
             let id = setTimeout(()=> {
                 this.updateTime(60000);
             }, delay);
@@ -225,18 +209,7 @@
             console.dir(delay);
         },
 
-        /* renderNewSlide(l){
-         if (!this.active_slide)return;
-         let length = $(this.element).find('.slider').children().length;
-         if (length === this.settings_list.length)return;
-         for(var i=1; i<l; i++,length++){
-         $(`<div class="slide weather_${length}">`).append($('.slide').html()).appendTo('.slider');
-         this.active_slide = $(`.slide.weather_${length}`);
-         }
-         this.renderSlider();
-         },*/
-
-        renderTemplate(){
+        renderTemplate: function () {
 
             let template =
                 `
@@ -253,7 +226,7 @@
 
         },
 
-        renderSlides(count){
+        renderSlides: function (count) {
             let length = $(this.element).find('.slider').children().length || 0;
             let slide = `<div class="slide">
                  <div class="visual">
@@ -282,7 +255,10 @@
                       <form class="search-form">
                         <div class="div">
                           <label for="city">Weather in ...</label>
-                          <input class="city" type="text" placeholder="">
+                          <div class="input-holder">
+                            <input class="city" type="text" placeholder="">
+                            <a type="submit" class="search-btn fa fa-search" aria-hidden="true"></a>
+                          </div>
                         </div>
                       </form>
                       <div class="buttons">
@@ -317,10 +293,9 @@
             this.renderSlider();
         },
 
-        renderWidget (dataWeather) {
+        renderWidget: function (dataWeather) {
 
             let ischecked = this.settings_list[this.current_slide_num].remember;
-            console.log('ischecked', ischecked);
             let meteo_info = `<img class="weather-icon" src= "${dataWeather.img_url}" alt="icon">
               <div class="weather">
                 <div class="descr">${dataWeather.descr}</div>
@@ -350,7 +325,7 @@
 
         },
 
-        renderUnits(dataWeather){
+        renderUnits: function (dataWeather) {
             this.active_slide = $('.slide.active');
             let activeUnit = this.settings_list[this.current_slide_num].units;
             let metric;
@@ -387,7 +362,7 @@
             });
         },
 
-        renderSlider(){
+        renderSlider: function () {
 
             let slider = $(this.element).find('.slider');
             let pagination = $(this.element).find(".slider-pagi");
@@ -437,13 +412,12 @@
             $(`.slider-pagi__elem-${numOfSlides}`).trigger("click")
         },
 
-        renderDay(){
+        renderDay: function () {
             let time = this.weather_data.time;
             let hours = moment(time).hours();
             let dayClass = '';
 
             let sun_angle = (hours - 9) * 30;
-            //console.log(sun_angle);
 
             let dayElements = [
                 $(this.element),
@@ -451,8 +425,6 @@
                 this.active_slide.find('.bg-wrap'),
                 this.active_slide.find('.visual')
             ];
-
-            console.log(this.active_slide);
 
             let dayList = [
                 'early_morning',
@@ -475,8 +447,6 @@
                 dayClass = 'night';
             }
 
-
-            console.log(dayClass);
             this.active_slide.find('.sun').find('animateTransform')
                 .attr('from', `${sun_angle - 60} 50 100`)
                 .attr('to', `${sun_angle} 50 100`);
@@ -490,7 +460,7 @@
 
         },
 
-        renderClock(time){
+        renderClock: function (time) {
 
             this.active_slide.find('.clock').attr('data-time', time.time);
             //render
@@ -514,75 +484,12 @@
             })
         },
 
-        registerEvents () {
-
-            $(this.element).on('submit', '.search-form', this, function (event) {
-                debugger;
-                let _this = event.data;
-                let elem = $(event.target);
-                let city = $.trim($(this).find('input').val());
-                event.preventDefault();
-
-
-                if(!city)return;
-
-                if (elem.closest('.slide').hasClass('pin')) {
-                    //new element
-                    _this.settings_list.push(Object.assign({}, defaults));
-                    _this.current_slide_num =  _this.settings_list.length-1;
-
-                    //_this.setSettings(defaults);
-                    _this.setSettings({city: city});
-                    _this.renderSlides(1);
-                } else {
-                    _this.setSettings({city: city});
-                }
-                _this.updateWidget();
-            });
-
-            $(this.element).on('click', 'button', this, function (event) {
-                let _this = event.data;
-                let unit = $(event.target).data('unit');
-                _this.setSettings({units: unit});
-                _this.renderUnits(_this.weather_data);
-            });
-
-            //setting data to local storage
-            $(this.element).on("change", "#remember:checkbox", this, function (event) {
-                let _this = event.data;
-                let elem = $(event.target);
-                if ($(event.target).is(':checked')) {
-                    elem.closest('.slide').addClass('pin');
-                    _this.setSettings({'remember': true});
-                    _this.setToLocalStorage(_this.settings_list[_this.current_slide_num]);
-                } else {
-                    elem.closest('.slide').removeClass('pin');
-                    _this.setSettings({'remember': false});
-                    let id = _this.weather_data.city_id;
-                    _this.clearLocalStorage(id);
-                }
-            });
-
-            $(this.element).on("click", ".rounded-btn", (event)=> {
-                event.preventDefault();
-                $(this.element).find('.slide.active').find('.search-holder').slideToggle(1200);
-            });
-
-            $(this.element).on("click", ".arrow", ()=> {
-                $(this).toggleClass("open");
-                $(this.element).find('.slide.active').find('.remember').animate({
-                    height: 'toggle'
-                });
-            });
-        },
-
-        setToLocalStorage(data){
+        setToLocalStorage: function (data) {
 
             if (typeof(Storage) === "undefined")return;
 
             let a = JSON.parse(localStorage.getItem(this.storage)) || [];
 
-            debugger;
             //Prevent from pushing the same data
             let isNew = a.every((el)=> {
                 return el.city_id !== data.city_id
@@ -594,7 +501,7 @@
             console.log(a)
         },
 
-        clearLocalStorage(id){
+        clearLocalStorage: function (id) {
             let a = JSON.parse(localStorage.getItem(this.storage));
             a = a.filter((el)=> {
                 return el.city_id != id;
@@ -604,17 +511,17 @@
             console.log(localStorage.getItem(this.storage));
         },
 
-        countStorageElements(){
+        countStorageElements: function () {
             let a = JSON.parse(localStorage.getItem(this.storage));
             return a.length;
         },
 
-        setSettings(data)  {
+        setSettings: function (data) {
             return Object.assign(this.settings_list[this.current_slide_num], data);
         },
 
         //sets global location data from api
-        setSettingsByDefault(){
+        setSettingsByDefault: function () {
             return new Promise((resolve, reject)=> {
                 this.getLocation().then((data)=> {
                     let globalData = {
@@ -639,8 +546,6 @@
 
         setSettingFromStorage(){
             if (!localStorage.getItem(this.storage))return false;
-            console.log('from storage');
-            debugger;
             this.settings_list = JSON.parse(localStorage.getItem(this.storage));
             this.settings = this.settings_list[0];
             return true;
@@ -655,26 +560,80 @@
             });
         },
 
+        registerEvents (){
+
+            let searchEvHandler = function (event) {
+
+                let _this = event.data;
+                let elem = $(event.target);
+                //get first city element
+                let city = ($.trim($(_this.element).find('input.city').val())).split(',').shift();
+                event.preventDefault();
+
+                if (!city)return;
+
+                if (elem.closest('.slide').hasClass('pin')) {
+                    //new element
+                    _this.settings_list.push(Object.assign({}, defaults));
+                    _this.current_slide_num = _this.settings_list.length - 1;
+
+                    //_this.setSettings(defaults);
+                    _this.setSettings({city: city});
+                    _this.renderSlides(1);
+                } else {
+                    _this.setSettings({city: city});
+                }
+                _this.updateWidget();
+            };
+            let unitsChangeEvHandler = function (event) {
+                let _this = event.data;
+                let unit = $(event.target).data('unit');
+                _this.setSettings({units: unit});
+                _this.renderUnits(_this.weather_data);
+            };
+            let localStorageEvHandler = function (event) {
+                let _this = event.data;
+                let elem = $(event.target);
+                if ($(event.target).is(':checked')) {
+                    elem.closest('.slide').addClass('pin');
+                    _this.setSettings({'remember': true});
+                    _this.setToLocalStorage(_this.settings_list[_this.current_slide_num]);
+                } else {
+                    elem.closest('.slide').removeClass('pin');
+                    _this.setSettings({'remember': false});
+                    let id = _this.weather_data.city_id;
+                    _this.clearLocalStorage(id);
+                }
+            };
+
+            $(this.element).on('click', '.search-btn', this, searchEvHandler);
+
+            $(this.element).on('click', 'button', this, unitsChangeEvHandler);
+
+            //setting data to local storage
+            $(this.element).on("change", "#remember:checkbox", this, localStorageEvHandler);
+
+            $(this.element).on("click", ".rounded-btn", (event)=> {
+                event.preventDefault();
+                $(this.element).find('.slide.active').find('.search-holder').slideToggle(1200);
+            });
+
+            $(this.element).on("click", ".arrow", ()=> {
+                $(this).toggleClass("open");
+                $(this.element).find('.slide.active').find('.remember').animate({
+                    height: 'toggle'
+                });
+            });
+        },
+
         //additional features
         addAutocomplete(){
 
-            /*  let inp = $(this.element).find('input.city');
+            let inp = $(this.element).find('input.city');
 
-             $.fn.geocomplete(inp);
-             inp.geocomplete();
-
-
-             if($.fn.geocomplete) {
-             inp.geocomplete({
-             details: ".geo-details",
-             detailsAttribute: "data-geo"
-             })
-             .bind("geocode:result",function (e) {
-             $(this).val($(this).text()).trigger("geocode");
-             //$(this).trigger('submit')
-             })}
-             */
-
+            if ($.fn.geocomplete) {
+                inp.geocomplete();
+            }
         }
     });
 

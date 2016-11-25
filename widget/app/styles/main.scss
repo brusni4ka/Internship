@@ -44,7 +44,7 @@ button {
   padding: 5px 10px;
   color: white;
 
-  &.active{
+  &.active,&:hover{
     background-color: rgb(251, 74, 69);
   }
 }
@@ -65,6 +65,7 @@ body{
   max-width: 300px;
   font: normal normal 16px/1.1em Arial, Helvetica, sans-serif;
   color: #484646;
+  overflow: hidden;
 
 
   .visual {
@@ -148,9 +149,10 @@ body{
 
         input[type="text"]{
           border: 0;
-          border-radius: 5px ;
-          padding: 10px;
-          margin: 10px;
+          border-radius: 5px;
+          width: 135px;
+          height: 35px;
+          padding: 0px 35px 0 10px
         }
       }
 
@@ -163,6 +165,26 @@ body{
         color: #fff;
         height: 35px;
         display: none;
+      }
+
+      .input-holder{
+        position: relative;
+        width: 60%;
+        margin: 10px auto;
+      }
+
+      .search-btn {
+        top: 50%;
+        transform: translate(-80%, -25%);
+        right: 0;
+        height: 100%;
+        position: absolute;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+
+        &:hover{
+          color: rgb(251, 74, 69);
+        }
       }
 
       input[type="checkbox"]{
@@ -427,6 +449,7 @@ body{
 
 .slide{
   display: inline-block;
+  vertical-align: top;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
 }
 

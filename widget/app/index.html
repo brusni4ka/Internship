@@ -7,6 +7,7 @@
   <title>JqueryWeather</title>
 
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <script src="https://use.fontawesome.com/11198c7445.js"></script>
   <!-- Place favicon.ico in the root directory -->
 
   <!-- build:css styles/vendor.css -->
@@ -39,18 +40,17 @@
 <script src="/bower_components/moment/moment.js"></script>
 <script src="/bower_components/moment-timezone/builds/moment-timezone-with-data.js"></script>
 
+
+<script src="scripts/jquery.geocomplete.min.js"></script>
 <script src="scripts/main.js"></script>
 
-<script>
-  var m = moment().tz('Pacific/Fakaofo');
-  console.log(m.format("hh:mm a "));
-</script>
 <script>
   $( function() {
     $( ".widget-holder" ).WeatheWidget( {
       city: ""
-    } );
+    }).init();
   } );
+
 </script>
 <!-- endbuild -->
 </body>
