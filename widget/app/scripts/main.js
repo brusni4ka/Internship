@@ -567,7 +567,7 @@
                 let _this = event.data;
                 let elem = $(event.target);
                 //get first city element
-                let city = ($.trim($(_this.element).find('input.city').val())).split(',').shift();
+                let city = ($.trim($(_this.active_slide).find('input.city').val())).split(',').shift();
                 event.preventDefault();
 
                 if (!city)return;
