@@ -35,7 +35,7 @@
             //root element
             element: element,
             active_slide: '',
-            settings_list: [Object.assign($.extend({}, defaults, options))],
+            settings_list: [$.extend({}, defaults, options)],
             //Local Storage key
             storage: 'weatherWidget',
             current_slide_num: 0,
