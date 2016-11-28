@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{%=o.htmlWebpackPlugin.options.title || 'JS GURU'%}</title>
+    <meta name="description" content="Application" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1.0">
+    {% if (o.htmlWebpackPlugin.files.favicon) { %}
+    <link rel="shortcut icon" href="{%=o.htmlWebpackPlugin.files.favicon%}">
+    {% } %}
+
+    {% for (var css in o.htmlWebpackPlugin.files.css) { %}
+    <link type="text/css" href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
+    {% } %}
+</head>
+<body>
+    Welcome to build version!
+    <noscript>
+        <div style="text-align: center; font-size:26px;">
+            Seems your browser doesn't support javascript!
+        </div>
+    </noscript>
+
+    <div class="widget_holder">
+
+    </div>
+
+    <!--widget-->
+
+
+    <!--<div class="widget">
+        <input type="button" id="btn" value="button">
+        <div class="visual day">
+            <div class="bg-wrap">
+                <div class="circle-day"></div>
+            </div>
+            <svg version="1.1" id="L3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+  <circle fill="#FFDB4D"  cx="0" cy="100%" r="12" >
+    <animateTransform
+      attributeName="transform"
+      dur="30s"
+      type="rotate"
+      from="0 50 70"
+      to="360 50 72"
+      repeatCount="indefinite" />
+  </circle>
+        </svg>
+        </div>
+        <div class="info">
+            <div class="btn-holder">
+                <a href="#" class="rounded-btn"></a>
+            </div>
+            <div class="geo-info">
+                <div class="clock" data-time="">
+                    <div class="minutes-container">
+                        <div class="minutes"></div>
+                    </div>
+                    <div class="hours-container">
+                        <div class="hours"></div>
+                    </div>
+                </div>
+                <span class="location"></span>
+            </div>
+
+            <div class="meteo-info">
+                <div class="weather">
+                    <div class="descr"></div>
+                    <div class="temp"><sup>&#176;</sup></div>
+                    <div class="other-inf">
+                        <span class="H">H 56<sup>&#176;</sup></span>
+                        <span class="L">L 34<sup>&#176;</sup></span>
+                    </div>
+                    <span class="wind">Winds: SE 20-25 MPH</span>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!--end widget-->
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBmhIcsHug6vS3dP_rDKcb7UJwv83xbqs"
+            async defer></script>
+    {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
+    <script type="text/javascript" src="{%=o.htmlWebpackPlugin.files.chunks[chunk].entry%}"></script>
+    {% } %}
+</body>
+</html>
