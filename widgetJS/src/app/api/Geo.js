@@ -1,8 +1,9 @@
 "use strict";
+import Config from '../config';
+
 export  default class Geo {
-    
+
     constructor() {
-        this._apiKey = 'AIzaSyDBmhIcsHug6vS3dP_rDKcb7UJwv83xbqs';
         this._available = true;
         this._params = {
             lat: '',
@@ -22,7 +23,7 @@ export  default class Geo {
         if (!this._available) {
             return;
         }
-        
+
     }
 
     _error(msg) {
@@ -31,33 +32,41 @@ export  default class Geo {
 
     _success(position) {
         return Promise.resolve(position.coords);
-
-       /* let lat = position.coords.latitude;
-        let lng = position.coords.longitude;
-        let latlng = new google.maps.LatLng(lat, lng);
-        console.log(this._codeLatLng(latlng));*/
-
     }
-    
-    _getCurrentLocation(){
-        debugger;
+
+    _getCurrentLocation() {
         return navigator.geolocation.getCurrentPosition(this._success, this._error)
     }
 
-    _getLocation(city){
-        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${this._apiKey}`)
+    getLocation(city) {
+
+        if (!city) {
+            let promise = new Promise(function (resolve, reject) {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+
+            return promise.then((position) => {
+                return {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+            }).catch((err) => {
+                console.error(err.message);
+            });
+        }
+        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${Config.GEO_API_KEY}`)
             .then(data=>data.json())
-            .then(data=>{
+            .then(data=> {
                 return Promise.resolve(data.results[0].geometry.location);
             });
     }
 
     _codeLatLng(latlng) {
         let geocoder = new google.maps.Geocoder();
-   /*     let city = 'Pseudo';
-        let state;
-        let message;*/
-        let result = {city :'', state:'', message:''};
+        /*     let city = 'Pseudo';
+         let state;
+         let message;*/
+        let result = {city: '', state: '', message: ''};
         geocoder.geocode({'latLng': latlng}, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[1]) {

@@ -1,16 +1,17 @@
 /**
  * Created by kate on 28/11/16.
  */
+import Config from '../config';
+
 export default class TimeZone{
     constructor(){
-        this._apiKey = 'AIzaSyBqO6Eblf3EeVW59nndnsXOjrdYtrFrIFU'
     }
 
     getTimeZone (geodatas) {
         
 
         let timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?` +
-            `location=${geodatas.lat},${geodatas.lng}&timestamp=1331161200&key=${this._apiKey}`;
+            `location=${geodatas.lat},${geodatas.lng}&timestamp=1331161200&key=${Config.TIMEZONE_API_KEY}`;
         
         return fetch(timezoneUrl)
             .then(data=>data.json())

@@ -134,15 +134,20 @@ body{
 			height: 100%;
 			top: -100%;
 			background-color: rgba(0, 0, 0, 0.5);
-			//display: none;
-			overflow: hidden;
-			transition: transform 0.5s;
+
+			transition: max-height .8s ease;
+
+			/* To hide by default, setting max-height
+                  and opacity = 0 */
+			max-height:     0;
+			opacity:        0;
+
 
 
 			.capture{
-				margin-top: 50%;
 				transform: translateY(-50%);
 				width: 100%;
+				top: 45%;
 				text-align: center;
 				position: absolute;
 
@@ -168,7 +173,13 @@ body{
 				background: #FB6964;
 				color: #fff;
 				height: 35px;
-				display: none;
+				transition: max-height .8s ease,opacity .8s ease;
+
+
+				max-height: 0;
+				opacity: 0;
+				//transition: ;
+				//animation: slideDown 2.5s 1.0s 1 ease forwards;
 			}
 
 			.input-holder{
