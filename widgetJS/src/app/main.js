@@ -1,69 +1,75 @@
-import Store from './Base/Store/Store';
-import Dispatcher from './Base/Dispatcher/Dispatcher';
+import Store from './Base/Store';
+import Dispatcher from './Base/Dispatcher';
 
 //Import Api
 import Geo from './api/Geo';
 import TimeZone from './api/Timezone';
 import Weather from './api/Weather';
 
-//import Views
-import ViewWeather from './Base/components/ViewWeather';
-
 //import Container
-import Container from './Base/Container/Container';
-
-
+import Container from './Container';
 
 //import animation
 import {anim} from './animation';
 
 let App = (function () {
-    let store = new Store('widget');
-    let geoApi = new Geo();
-    let timeZone = new TimeZone();
-    let weatherApi = new Weather();
-    let dispatcher = new Dispatcher();
-    let view = new ViewWeather();
-    let container = new Container();
+    const store = new Store('widget');
+    const geoApi = new Geo();
+    const timeZone = new TimeZone();
+    const weatherApi = new Weather();
+    const dispatcher = new Dispatcher();
 
-    let node = null;
+    var node = '';
 
+    let init = function (el) {
 
-    let start = function (el) {
-        node = document.getElementsByClassName(el)[0];
-        container.setNode(node);
-        view.renderTemplate();
+        node = (typeof el == 'string' || typeof el == 'number') ? document.getElementById(el) : el;
+        //setting our node parent element
+        const container = new Container(node);
+        //container.setNode(node);
 
-        store.addListener('UPDATED', container.setState.bind(view));
-      /*  store.addListener('UPDATED', view.renderDay.bind(view));
-        store.addListener('UPDATED', view.renderUnits.bind(view));
-        store.addListener('UPDATED', view.renderClock.bind(view));*/
-
-
-        store.addListener('UNIT_UPDATED', view.renderUnits.bind(view));
-
+        store.addListener('UPDATED', container.render.bind(container));
 
         dispatcher.register(function (payload) {
             let data = '';
             switch (payload.type) {
                 case 'UPDATE_STORE' :
-                    Object.assign(store, payload.params);
+                    store.setData(payload.params);
+                    //Object.assign(store, payload.params);
                     break;
 
                 case 'ADD_WEATHER' :
-                    store.setWeatherData(payload.params);
+                    store.setData(payload.params);
                     data = store.getState();
+                    debugger;
                     store.emit('UPDATED', data);
                     break;
 
+                case 'GET_WEATHER_BY_CITY':
+                    geoApi.getLocation(payload.params)
+                        .then((response)=> {
+                            return Promise.all([
+                                timeZone.getTimeZone(response),
+                                weatherApi.getWeatherData(response)
+                            ])
+                        })
+                        .then((response) => {
+                            let time = moment().tz(response[0].timeZoneId);
+                            let data = Object.assign(response[1], {time: time});
+                            store.setData(data);
+                            store.emit('UPDATED', data);
+                        });
+                    break;
+                
                 case 'ADD_TIME' :
                     //store.addTimeData(payload.params);
                     break;
 
                 case 'CHANGE_UNIT':
-                    store.setWeatherData({unit: payload.params});
+                    store.setData({temp: {unit: payload.params}});
                     data = store.getState();
-                    store.emit('UNIT_UPDATED', data);
+                    debugger;
+                    store.emit('UPDATED', data);
                     break;
 
                 default:
@@ -71,10 +77,13 @@ let App = (function () {
             }
         });
 
+        console.dir(dispatcher);
+        var d = new Dispatcher();
+        console.dir(d);
+        
         run();
         eventsHolder();
     };
-
 
 
     function run(city) {
@@ -98,72 +107,64 @@ let App = (function () {
                     params: data
                 });
 
-                console.dir(store.getState());
             });
 
     }
 
-
-
     function eventsHolder() {
 
+        // let node = this.node;
 
-        let btn = node.getElementsByClassName('rounded-btn')[0];
-        let el = node.getElementsByClassName('search-holder')[0];
-        let arrow = node.getElementsByClassName('arrow')[0];
-        let rememberBlock = node.getElementsByClassName('remember')[0];
-        let searchBtn = node.getElementsByClassName('search-btn')[0];
-        let unitBtn = node.getElementsByClassName('buttons')[0];
+        const eventHolder = {
+            
+            'rounded-btn': () => {
+                let el = node.getElementsByClassName('search-holder')[0];
+                anim.slideToggle(el);
+            },
 
+            'arrow': () => {
+                let rememberBlock = node.getElementsByClassName('remember')[0];
+                anim.slideToggle(rememberBlock);
+            },
+            'remember': () => {
 
-        arrow.onclick = function () {
-            event.stopPropagation()
-            anim.slideToggle(rememberBlock);
+            },
+            
+            'search-btn': () => {
+                let city = node.getElementsByClassName('city')[0].value.split(',').shift();
+                if (!city)return;
+                run(city);
+            }
+           /* 'unit-btn': () => {
+                let unit = event.target.getAttribute('data-unit');
+                
+                dispatcher.dispatch({
+                    type: 'CHANGE_UNIT',
+                    params: unit
+                })
+            }*/
         };
+        
 
-        btn.onclick = function () {
-            event.stopPropagation()
-            anim.slideToggle(el);
-        };
+        node.addEventListener('click', event => {
+            event.stopPropagation();
+            let el = event.target;
 
-        searchBtn.onclick = function () {
+            for (let key in eventHolder) {
+                if (eventHolder.hasOwnProperty(key)) {
+                    if (el.classList.contains(key)) {
+                        eventHolder[key]();
+                    }
+                }
 
-            event.preventDefault();
-            let city = document.getElementsByClassName('city')[0].value.split(',').shift();
-            if (!city)return;
+            }
 
-            run(city);
-        };
-
-        unitBtn.onclick = function () {
-            let unit = event.target.getAttribute('data-unit');
-            debugger;
-            dispatcher.dispatch({
-                type: 'CHANGE_UNIT',
-                params: unit
-            })
-            ;
-            /*_this.setSettings({units: unit});
-             _this.renderUnits(_this.weather_data);*/
-        };
-
-
-        /*
-         node.getElementsByClassName('rounded-btn')[0].addEventListener("click", (event)=> {
-         event.preventDefault();
-
-         let el = node.getElementsByClassName('search-holder')[0];
-         debugger;
-         el.style.display = (el.style.display != 'none' ? 'none' : '' );
-         });
-         */
-
+        });
 
     }
 
-
     return {
-        start: start
+        init: init
     }
 
 }());

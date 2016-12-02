@@ -4,7 +4,11 @@
 export default class Dispatcher {
 
     constructor() {
-        this.callbacks = [];
+        if (!Dispatcher.instance) {
+            this.callbacks = [];
+            Dispatcher.instance = this;
+        }
+        return Dispatcher.instance;
     }
 
     register(callback) {

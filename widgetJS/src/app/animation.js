@@ -5,7 +5,7 @@
 export const anim = {
     //slide effects
 
-    time: null,
+    id: 0,
 
     slideToggle: function (elem) {
         if(elem.classList.contains('active')){
@@ -13,7 +13,7 @@ export const anim = {
             this.slideUp(elem);
         }else{
             if(this.time){
-                window.clearInterval(this.time);
+                window.clearInterval(this.id);
             }
             elem.classList.add('active');
             this.slideDown(elem);
@@ -34,11 +34,11 @@ export const anim = {
 
     once: function (seconds, callback) {
         var counter = 0;
-        this.time = window.setInterval(function () {
+        this.id = window.setInterval( ()=> {
             counter++;
             if (counter >= seconds) {
                 callback();
-                window.clearInterval(time);
+                window.clearInterval(this.id);
             }
         }, 1000);
     }

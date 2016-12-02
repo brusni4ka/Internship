@@ -21,14 +21,15 @@ export  default class Weather {
                             city: response.name,
                             state: response.sys.country,
                             descr: response.weather[0].description,
-                            tempC: response.main.temp,
-                            tempF: response.main.temp * 9 / 5 + 32,
                             humidity: response.main.humidity,
                             pressure: response.main.pressure,
                             speed: response.wind.speed,
-                            img_url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png',
+                            img_url: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/217538/' + response.weather[0].icon + '.png'
+                        },
+                        temp: {
+                            tempC: response.main.temp,
+                            tempF: response.main.temp * 9 / 5 + 32,
                             unit: 'metric'
-
                         }
                     }
                 );
