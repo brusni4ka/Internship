@@ -1,0 +1,8 @@
+{
+  "name": "easyweather",
+  "private": true,
+
+  "devDependencies": {
+    "moment-timezone": "^0.5.9"
+  }
+}
