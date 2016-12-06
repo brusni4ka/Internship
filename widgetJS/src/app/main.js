@@ -24,9 +24,9 @@ let App = (function () {
     let init = function (el) {
 
         node = (typeof el == 'string' || typeof el == 'number') ? document.getElementById(el) : el;
+        debugger;
         //setting our node parent element
         const container = new Container(node);
-        //container.setNode(node);
 
         store.addListener('UPDATED', container.render.bind(container));
 
@@ -77,9 +77,6 @@ let App = (function () {
             }
         });
 
-        console.dir(dispatcher);
-        var d = new Dispatcher();
-        console.dir(d);
         
         run();
         eventsHolder();

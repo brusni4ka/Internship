@@ -16,8 +16,5 @@ export default class Container extends View{
     render(){
         Weather.setState({...this.state, node: this._node });
     };
-
-    setNode(node){
-        this._node = node;
-    }
+    
 }

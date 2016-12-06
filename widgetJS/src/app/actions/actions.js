@@ -8,7 +8,6 @@ export default {
     //Get new city's weather 
     exploreWeatherInCity: function (e) {
         e.preventDefault();
-        debugger;
         let city = this.node.getElementsByClassName('city')[0].value.split(',').shift();
         if (!city)return;
         
