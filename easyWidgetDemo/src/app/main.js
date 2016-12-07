@@ -45,7 +45,6 @@ const App = (function () {
         if (setSettingFromStorage()) {
             let len = settings_list.length;
             renderTemplate();
-            debugger;
             renderSlides(len);
             updateWidget();
         } else {
@@ -360,8 +359,6 @@ const App = (function () {
 
         createBullets();
         changeSlides(curSlide);
-
-        // element.getElementsByClassName(`weather_${curSlide}`)[0].classList.add('active');
     }
 
     function changeSlides(num) {
@@ -546,14 +543,13 @@ const App = (function () {
             },
 
             'unit-btn': (elem) => {
-                debugger;
                 let unit = elem.getAttribute('data-unit');
                 setSettings({units: unit});
                 renderUnits(weather_data);
             },
 
             'remember_location': (elem) => {
-                // let elem = event.target;
+       
                 if (elem.checked) {
                     active_slide.classList.add('pin');
                     setSettings({'remember': true});
@@ -572,7 +568,7 @@ const App = (function () {
                 current_slide_num = curSlide;
 
                 changeSlides(curSlide);
-                debugger;
+              
                 if (active_slide &&
                     active_slide.querySelector('.location').getAttribute('data-ci') !== settings_list[current_slide_num].city_id) {
                     updateWidget();
@@ -582,9 +578,8 @@ const App = (function () {
         };
 
         element.addEventListener('click', event => {
+            
             event.stopPropagation();
-            event.preventDefault();
-
             let el = event.target;
 
             for (let key in eventHolder) {
