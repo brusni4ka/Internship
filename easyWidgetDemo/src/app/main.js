@@ -76,7 +76,6 @@ const App = (function () {
 
         timeOut.widget_id = id;
         timeOut.time = delay;
-        console.dir(timeOut);
     }
 
     function updateTime(delayTime) {
@@ -103,7 +102,6 @@ const App = (function () {
 
         weather_data.time = moment(time).add(1, 'minutes');
         timeOut.clock_id = id;
-        console.dir(delay);
     }
 
     //combine function chane;
