@@ -17,7 +17,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="todoApp">
-                <TodoForm handleSubmit={ (e)=>this._handleSubmit(e) } />
+                <TodoForm handleSubmit={ (e,value)=>this._handleSubmit(e, value) } />
 
                 <TodoList items={this.state.items}
                           editing={this.state.editing}
@@ -25,7 +25,7 @@ export default class App extends Component {
                           handleEdit={(e)=>this._handleEdit(e)}
                           handleChange={(e)=>this._handleChange(e)}
                           markCompleted={(e)=>this._markCompleted(e)}
-                          saveEdit={(e)=>this._saveEdit(e)}
+                          saveEdit={(e,id,text)=>this._saveEdit(e,id,text)}
                           showMode={this.state.show_mode}
                 />
                 <TodoShowMode handleSetMode={(e)=>this._handleSetMode(e)} mode={this.state.show_mode}/>
@@ -37,7 +37,7 @@ export default class App extends Component {
         this.setState({text: e.target.value});
     }
 
-    _handleSubmit({e,value}) {
+    _handleSubmit( e,value) {
         e.preventDefault();
         let text = value.trim();
         if (!text)return;
@@ -65,7 +65,7 @@ export default class App extends Component {
         this.setState({editing: todo.id});
     }
 
-    _saveEdit({e, id, todo}) {
+    _saveEdit( e, id, todo) {
         e.preventDefault();
         this.state.items.map((task) => {
             if (task.id == id)  task.text = todo;

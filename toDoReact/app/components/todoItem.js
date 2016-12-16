@@ -29,7 +29,7 @@ export class TodoItem extends Component {
 
         if (id == editing) {
             node =
-                <form onSubmit={(e)=>saveEdit({e:e, id:editing, todo: this.state.editText})}>
+                <form onSubmit={(e)=>saveEdit(e, editing, this.state.editText)}>
                     <input type="text" className="item_input"
                            value={ this.state.editText}
                            onChange={ (e)=>this.handleChange(e) }
