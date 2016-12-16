@@ -17,32 +17,33 @@ export const TodoList = (props)=> {
     } = props;
 
     const Items = items.map(item => {
-        if(!item.text.trim())return;
+        if (!item.text.trim())return;
         let toDo = <TodoItem key={item.id}
                              todo={item.text}
                              id={item.id}
                              isDone={item.done}
-                             handleEdit={ handleEdit.bind(this, item) }
-                             handleDelete={ handleDelete.bind(this, item) }
-                             markCompleted={ markCompleted.bind(this, item)}
-                             editing={editing}
+                             handleEdit={ (e)=>handleEdit(item) }
+                             handleDelete={ (e)=>handleDelete(item) }
+                             markCompleted={ (e)=>markCompleted(item)}
+                             editing={ editing }
                              handleChange={ handleChange }
                              saveEdit={saveEdit}
 
         />;
-            switch (showMode){
-                case 'ACTIVE':
-                    if(!item.done){
-                        return toDo;
-                    }
-                    break;
-                case 'COMPLETED':
-                    if(item.done){
-                        return toDo;
-                    }
-                    break;
-                default: return toDo;
-            }
+        switch (showMode) {
+            case 'ACTIVE':
+                if (!item.done) {
+                    return toDo;
+                }
+                break;
+            case 'COMPLETED':
+                if (item.done) {
+                    return toDo;
+                }
+                break;
+            default:
+                return toDo;
+        }
 
     });
 

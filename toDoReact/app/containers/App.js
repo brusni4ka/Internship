@@ -11,32 +11,24 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        this._handleChange = this._handleChange.bind(this);
-        this._handleSubmit = this._handleSubmit.bind(this);
-        this._handleDelete = this._handleDelete.bind(this);
-        this._handleEdit = this._handleEdit.bind(this);
-        this._markCompleted = this._markCompleted.bind(this);
-        this._saveEdit = this._saveEdit.bind(this);
-        this._handleSetMode = this._handleSetMode.bind(this);
-
         this.state = {items: [], editing: null, show_mode: 'ALL'};
     }
 
     render() {
         return (
             <div className="todoApp">
-                <TodoForm handleSubmit={this._handleSubmit} />
+                <TodoForm handleSubmit={ (e)=>this._handleSubmit(e) } />
 
                 <TodoList items={this.state.items}
                           editing={this.state.editing}
-                          handleDelete={this._handleDelete}
-                          handleEdit={this._handleEdit}
-                          handleChange={this._handleChange}
-                          markCompleted={this._markCompleted}
-                          saveEdit={this._saveEdit}
+                          handleDelete={(e)=>this._handleDelete(e)}
+                          handleEdit={(e)=>this._handleEdit(e)}
+                          handleChange={(e)=>this._handleChange(e)}
+                          markCompleted={(e)=>this._markCompleted(e)}
+                          saveEdit={(e)=>this._saveEdit(e)}
                           showMode={this.state.show_mode}
                 />
-                <TodoShowMode handleSetMode={this._handleSetMode} mode={this.state.show_mode}/>
+                <TodoShowMode handleSetMode={(e)=>this._handleSetMode(e)} mode={this.state.show_mode}/>
             </div>
         );
     }
@@ -45,7 +37,7 @@ export default class App extends Component {
         this.setState({text: e.target.value});
     }
 
-    _handleSubmit(e,value) {
+    _handleSubmit({e,value}) {
         e.preventDefault();
         let text = value.trim();
         if (!text)return;
@@ -61,7 +53,7 @@ export default class App extends Component {
 
     _handleDelete(todo) {
         const taskList = this.state.items.filter((task) => {
-            if (task.id !== todo.id) return task;
+            return task.id !== todo.id;
         });
 
         this.setState({
@@ -73,8 +65,7 @@ export default class App extends Component {
         this.setState({editing: todo.id});
     }
 
-    _saveEdit(e, id, todo) {
-
+    _saveEdit({e, id, todo}) {
         e.preventDefault();
         this.state.items.map((task) => {
             if (task.id == id)  task.text = todo;

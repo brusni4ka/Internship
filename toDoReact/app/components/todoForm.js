@@ -19,7 +19,7 @@ export class TodoForm extends Component {
     render() {
         const {handleSubmit} = this.props;
         return (
-            <form className="main-todo-form" onSubmit={ (e)=>this.handleSubmit(e, handleSubmit(e,this.state.text))}>
+            <form className="main-todo-form" onSubmit={ (e)=>this.handleSubmit( handleSubmit({e:e, value: this.state.text}))}>
                 <input type="text" placeholder="Enter todo task..." onChange={ (e)=>this.handleChange(e) } value={ this.state.text}/>
                 <button className="fa fa-plus add-btn" aria-hidden="true"></button>
             </form>
