@@ -1,0 +1,178 @@
+@charset "UTF-8";
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.42em;
+    color:#A7A1AE;
+    background-color:#1F2739;
+}
+
+h2 {
+    font-size:3em;
+    font-weight: 300;
+    line-height:1em;
+    text-align: center;
+    color: #4DC3FA;
+}
+
+h2 a {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #FB667A;
+    text-decoration: none;
+}
+
+button{
+    border: 0;
+    background: none;
+}
+
+.blue { color: #185875; }
+.yellow { color: #FFF842; }
+
+
+.studentsTable{
+    margin: 0 auto;
+    width: 80%;
+}
+.table-container th h2 {
+    font-weight: bold;
+    font-size: 1em;
+    text-align: left;
+    color: #185875;
+}
+
+.table-container td {
+    font-weight: normal;
+    font-size: 1em;
+    -webkit-box-shadow: 0 2px 2px -2px #0E1119;
+    -moz-box-shadow: 0 2px 2px -2px #0E1119;
+    box-shadow: 0 2px 2px -2px #0E1119;
+}
+
+.table-container {
+    text-align: left;
+    overflow: hidden;
+    width: 80%;
+    margin: 0 auto;
+    display: table;
+    padding: 0 0 8em 0;
+}
+
+thead{
+    position:relative;
+}
+
+.table-container td, .table-container th {
+    padding-bottom: 2%;
+    padding-top: 2%;
+    padding-left:2%;
+}
+
+/* Background-color of the odd rows */
+.table-container tr:nth-child(odd) {
+    background-color: #323C50;
+}
+
+/* Background-color of the even rows */
+.table-container tr:nth-child(even) {
+    background-color: #2C3446;
+}
+
+.table-container th {
+    background-color: #1F2739;
+}
+
+.table-container td:first-child { color: #FB667A; }
+
+.Table-headCell{
+    text-transform: capitalize;
+}
+.table-cell-department, .table-cell-status{
+    text-transform: uppercase;
+}
+
+
+/* 
+.container tr:hover {
+   background-color: #464A52;
+}
+.container td:hover {
+  background-color: #FFF842;
+  color: #403E10;
+  font-weight: bold;
+  
+  box-shadow: #7F7C21 -1px 1px, #7F7C21 -2px 2px, #7F7C21 -3px 3px, #7F7C21 -4px 4px, #7F7C21 -5px 5px, #7F7C21 -6px 6px;
+  transform: translate3d(6px, -6px, 0);
+  
+  transition-delay: 0s;
+	  transition-duration: 0.4s;
+	  transition-property: all;
+  transition-timing-function: line;
+} */
+
+@media (max-width: 800px) {
+    .table-container td:nth-child(4),
+    .table-container th:nth-child(4) { display: none; }
+}
+
+
+.approved{
+    background-color: #42ff8f;
+    color: #383619;
+    font-weight: bold;
+}
+
+.uncertain{
+    background-color: #FFF842;
+    color: #403E10;
+    font-weight: bold;
+}
+
+.rejected{
+    background-color: #ff4242;
+    color: #401010;
+    font-weight: bold;
+}
+
+.edit, .delete{
+    padding: 0 10px;
+    display: inline-block;
+
+}
+.edit:hover, .delete:hover, .add-row:hover{
+    cursor:pointer;
+    color: #fcfaff;
+}
+
+.add-row{
+    float: right;
+    font-size: 1.6em;
+    margin-top: -45px;
+}
+
+
+/*MODAL WINDOW*/
+
+#cover-div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9000;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    opacity: 0.3;
+}
+ 
+#modalwindow {
+    z-index: 11;
+    background: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #a1a1a1;
+    box-shadow: 0 0 10px #444;
+
+}
