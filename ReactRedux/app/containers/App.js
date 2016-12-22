@@ -6,6 +6,7 @@ import Table from './Table';
 import Form from './Form'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Comp from './test'
 
 
 class App extends Component{
@@ -40,6 +41,7 @@ class App extends Component{
                           triggerModal={()=>this.triggerModal()}
                     />
                 </MuiThemeProvider>
+                <Comp/>
 
             </div>
         );

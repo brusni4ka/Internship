@@ -5,9 +5,11 @@ import React, {Component} from 'react';
 import TableHead from '../components/tableHead';
 import TableRow from '../components/tableRow';
 import {connect} from 'react-redux';
-import {add,remove} from '../action/actions';
+import {remove} from '../action/actions';
+import {bindActionCreators} from 'redux'
 
-const Table = ({elements, isVisible, onDelete, onEdit}) => {
+
+const Table = ({elements, remove, onEdit}) => {
 
     let table = (
         <table className='table-container'>
@@ -16,7 +18,7 @@ const Table = ({elements, isVisible, onDelete, onEdit}) => {
             {elements.map((el) => {
                 return <TableRow element={el}
                                  key={el.id}
-                                 onDelete={() => { onDelete(el.id) }}
+                                 onDelete={() => { remove(el.id) }}
                                  onEdit={()=>{ onEdit(el.id) }}
                 />
             })}
@@ -30,25 +32,19 @@ const Table = ({elements, isVisible, onDelete, onEdit}) => {
     return (
         <div className='TableContainer'>
             <h1 className='TableContainer-head'>Students List</h1>
-            {isVisible ? table : emptyDiv}
+            {table }
         </div>
     );
 };
 
 
-const mapStateToProps = (state) => ({
-    elements: state.students.elements,
-    isVisible: state.students.isVisible
+const mapStateToProps = ({students}) => ({
+    elements: students.elements,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-    onDelete: (id) => {
-        dispatch(remove(id));
-    },
-    onAdd: (data) => {
-        dispatch(add(data));
-    }
-});
+const mapDispatchToProps = (dispatch) => (
+    bindActionCreators({remove}, dispatch)
+);
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table)

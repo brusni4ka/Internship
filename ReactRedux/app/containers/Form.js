@@ -8,6 +8,7 @@ import SelectField from 'material-ui/SelectField';
 import {connect} from 'react-redux';
 import {save, edit} from '../action/actions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import {bindActionCreators} from 'redux'
 
 
 class Form extends Component {
@@ -77,7 +78,7 @@ class Form extends Component {
 
 
     render() {
-        const {onSubmit, onEdit, onSaveChanges, editable, triggerModal, formIsOpen, elements} = this.props;
+        const {save, edit, onSaveChanges, editable, triggerModal, formIsOpen, elements} = this.props;
         let elem = {};
 
         if (editable) {
@@ -102,15 +103,15 @@ class Form extends Component {
                 label="Submit"
                 primary={true}
                 type="submit"
-                keyboardFocused={true}
+                keyboardFocused={!this.state.error}
                 onClick={()=>{
                 if(editable){
                      onSaveChanges();
-                     this.handleEdit(onEdit, elem);
+                     this.handleEdit(edit, elem);
                 }else{
                      if (!this.validate() || this.state.error)return;
                      onSaveChanges();
-                     this.handleSubmit(onSubmit);
+                     this.handleSubmit(save);
                  }
                 }}
             />
@@ -143,7 +144,7 @@ class Form extends Component {
                         </div>
                         <div>
                             <TextField
-                                errorText={this.state.department && this.state.department.trim()===''?
+                                errorText={this.state.error && this.state.department.trim()===''?
                                 'This field is required':''
                                 }
                                 hintText='Economic department'
@@ -175,19 +176,13 @@ class Form extends Component {
 
 }
 
-const mapStateToProps = (state)=>({
-    elements: state.students.elements
+const mapStateToProps = ({students})=>({
+    elements: students.elements
 });
 
-const mapDispatchToProps = (dispatch)=>({
-    onSubmit: (value)=> {
-        dispatch(save(value))
-    },
-
-    onEdit: (data)=> {
-        dispatch(edit(data));
-    }
-});
+const mapDispatchToProps = (dispatch)=> (
+    bindActionCreators({save, edit}, dispatch)
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)
 

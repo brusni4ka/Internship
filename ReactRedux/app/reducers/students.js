@@ -35,7 +35,6 @@ const initialState = {
 
     ],
     editable: null,
-    isVisible: true
 };
 let id = initialState.elements[initialState.elements.length - 1].id;
     

@@ -7,11 +7,6 @@ export const remove = (id) => ({
 });
 
 
-export const add = ()=>({
-    type: 'ADD_STUDENT',
-    showModal: true
-});
-
 export const save = (data)=> {
     return ({
         type: 'SAVE_STUDENT',
