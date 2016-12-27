@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -9,12 +9,12 @@ import {connect} from 'react-redux';
 import {save, edit} from '../action/actions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {bindActionCreators} from 'redux'
-
+injectTapEventPlugin();
 
 class Form extends Component {
 
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             name: '',
             department: '',
@@ -26,7 +26,6 @@ class Form extends Component {
             'name',
             'department'
         ];
-        injectTapEventPlugin();
     }
 
     validate() {
@@ -56,27 +55,28 @@ class Form extends Component {
     }
 
     handleSubmit(callback) {
-        let newStudent = {
-            name: this.state.name,
-            department: this.state.department,
-            status: this.state.status
+        const {name, department, status} = this.state;
+        const newStudent = {
+            name ,
+            department,
+            status
         };
         this.stateToInit();
         callback(newStudent);
     }
 
     handleEdit(callback, elem) {
-        let editStudent = {
+        const {name, department, status} = this.state;
+        const editStudent = {
             id: elem.id,
-            name: this.state.name == '' ? elem.name : this.state.name,
-            department: this.state.department == '' ? elem.department : this.state.department,
-            status: this.state.status == '' ? elem.status : this.state.status
+            name: name == '' ? elem.name : name,
+            department: department == '' ? elem.department : department,
+            status: status == '' ? elem.status : status
         };
         this.stateToInit();
         callback(editStudent);
     }
-
-
+    
     render() {
         const {save, edit, onSaveChanges, editable, triggerModal, formIsOpen, elements} = this.props;
         let elem = {};
@@ -86,8 +86,7 @@ class Form extends Component {
         }
 
         const {name, department, status, id} = elem;
-
-
+        
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -172,8 +171,6 @@ class Form extends Component {
             </div>
         );
     }
-
-
 }
 
 const mapStateToProps = ({students})=>({
@@ -183,6 +180,17 @@ const mapStateToProps = ({students})=>({
 const mapDispatchToProps = (dispatch)=> (
     bindActionCreators({save, edit}, dispatch)
 );
+
+
+Form.propTypes = {
+    save: PropTypes.func,
+    edit: PropTypes.func,
+    onSaveChanges: PropTypes.func,
+    triggerModal: PropTypes.func,
+    editable: PropTypes.number,
+    formIsOpen: PropTypes.bool,
+    elements: PropTypes.array
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form)
 

@@ -1,7 +1,7 @@
 /**
  * Created by kate on 19/12/16.
  */
-import React, {Component} from 'react';
+import React, {Component,PropTypes} from 'react';
 
 const Control = ({onEdit, onDelete}) => {
     return (
@@ -10,6 +10,11 @@ const Control = ({onEdit, onDelete}) => {
             <span className="delete fa fa-trash" onClick={onDelete} aria-hidden="true"/>
         </div>
     );
+};
+
+Control.propTypes = {
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func
 };
 
 export default Control;

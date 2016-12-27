@@ -1,28 +1,26 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import App from './containers/App';
-
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-
+import {Routes} from  './routes';
+import {Router, Route, IndexRoute, browserHistory} from 'react-router'
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers/';
+import thunk from 'redux-thunk' // <-- добавили redux-thunk
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
+ReactDOM.render((
+    < Provider store={store}>
+        <Router routes={Routes} history={browserHistory}/>
+    </Provider>
+), document.getElementById('root'));
 
-ReactDOM.render(
-<Provider store={store}>
-  <App />
-</Provider>, document.getElementById('root'));
-
-
-
-
-
-
-
-
-
+/*    < Provider
+ store = {store} >
+ < App / >
+ < / Provider >, document.getElementById('root')
+ )
+ ;*/
 
 
 // Жизненный цикл компонента

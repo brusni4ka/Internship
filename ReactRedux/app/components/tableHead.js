@@ -7,7 +7,7 @@ import HeadCell from './headCell';
 
 const TableHead = () => {
 
-    let className = 'Table-headCell';
+    const className = 'Table-headCell';
     return (
         <thead>
         <tr>
@@ -18,6 +18,6 @@ const TableHead = () => {
         </tr>
         </thead>
     );
-}
+};
 
 export default TableHead;

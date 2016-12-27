@@ -1,5 +1,8 @@
-import * as types from '../constants/ActionTypes';
-
+import {
+    DELETE_STUDENT,
+    SAVE_STUDENT,
+    EDIT_STUDENT,
+} from '../constants/ActionTypes'
 const initialState = {
     elements: [
         {
@@ -37,26 +40,26 @@ const initialState = {
     editable: null,
 };
 let id = initialState.elements[initialState.elements.length - 1].id;
-    
-const studentsReducer = (state = initialState, action) => {
-    let  elements;
+
+const students = (state = initialState, action) => {
+    let elements;
     switch (action.type) {
 
-        case types.DELETE_STUDENT:
+        case DELETE_STUDENT:
             id--;
-            elements = state.elements.filter((el) => el.id !== action.id);
+            elements = state.elements.filter(el => el.id !== action.id);
             elements = elements.map((el, i)=> {
                 el.id = i + 1;
                 return el;
             });
-            return { ...state, elements};
+            return {...state, elements};
 
-        case types.SAVE_STUDENT:
+        case SAVE_STUDENT:
             id++;
             let newStudent = {...action.data, id: id};
             return {...state, elements: [...state.elements, newStudent]};
 
-        case types.EDIT_STUDENT:
+        case EDIT_STUDENT:
             let student = {...action.data};
             elements = state.elements.map(el=>el.id == action.data.id ? el = student : el);
             return {...state, elements};
@@ -64,6 +67,6 @@ const studentsReducer = (state = initialState, action) => {
         default:
             return state;
     }
-}
+};
 
-export default studentsReducer;
+export default students;

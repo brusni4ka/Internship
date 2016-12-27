@@ -1,13 +1,13 @@
 /**
  * Created by kate on 19/12/16.
  */
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 
 import TableCell from './tableCell';
 import Control from './control';
 
 const TableRow = ({element, onDelete, onEdit}) => {
-    let className = `Table-row`;
+    const className = `Table-row`;
 
     return (
         <tr className={className}>
@@ -20,5 +20,10 @@ const TableRow = ({element, onDelete, onEdit}) => {
     );
 };
 
+TableRow.propTypes = {
+    element: PropTypes.object,
+    onDelete: PropTypes.func,
+    onEdit: PropTypes.func
+};
 
 export default TableRow ;
