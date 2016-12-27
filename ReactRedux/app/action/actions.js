@@ -45,13 +45,18 @@ const loginError = (message)=> (
     message
 });
 
-export const loginUser=(creds)=> {
+export const loginUser = (creds)=> {
 
     return dispatch => {
         dispatch(requestLogin(creds));
+        let id_token = Object.values(creds).every(el=>el)? btoa(Object.values(creds).join('')):'';
 
+        if (id_token == '') {
+            // Dispatch the error action
+            dispatch(loginError('Please try one more time'));
+            return;
+        }
         setTimeout(() => {
-             let id_token = btoa(Object.values(creds).join(''));
             localStorage.setItem('id_token', id_token);
             // Dispatch the success action
             dispatch(receiveLogin(id_token));
@@ -59,7 +64,7 @@ export const loginUser=(creds)=> {
     }
 };
 
-export const logoutUser=()=>({
+export const logoutUser = ()=>({
     type: LOGOUT
 });
 

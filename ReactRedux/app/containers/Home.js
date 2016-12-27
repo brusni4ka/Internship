@@ -4,21 +4,23 @@
 import React, {Component, PropTypes} from 'react';
 import Login from '../components/LoginForm';
 import {connect} from 'react-redux';
-import { loginUser,logoutUser } from '../action/actions';
+import {loginUser, logoutUser} from '../action/actions';
 import {bindActionCreators} from 'redux'
 
 class Home extends Component {
 
-    onClickHandler(e){
+    onClickHandler(e) {
         e.preventDefault();
         this.props.logoutUser();
     }
+
     render() {
+        const {errorMessage, isAuthenticated} = this.props.user;
         const Greet = (
-                <h1>Press to logout <a href="" onClick={(e)=>this.onClickHandler(e)}>Logout</a></h1>
+            <h1>Press to <a href="" onClick={(e)=>this.onClickHandler(e)}>Logout</a></h1>
         );
 
-        const node = this.props.user.isAuthenticated ? Greet : <Login onUserLogin={ this.props.loginUser }/>;
+        const node = isAuthenticated ? Greet : <Login message={errorMessage} onUserLogin={ this.props.loginUser }/>;
         return (
             <div>
                 {node}
@@ -33,7 +35,7 @@ const mapStateToProps = ({user})=>({
 });
 
 const mapDispatchToProps = (dispatch)=> (
-    bindActionCreators( {loginUser, logoutUser},  dispatch)
+    bindActionCreators({loginUser, logoutUser}, dispatch)
 );
 
 Home.propTypes = {

@@ -4,12 +4,9 @@
 import React, {Component, PropTypes} from 'react';
 import TableHead from '../components/tableHead';
 import TableRow from '../components/tableRow';
-import {connect} from 'react-redux';
-import {remove} from '../action/actions';
-import {bindActionCreators} from 'redux'
 
 
-const Table = ({elements, remove, onEdit}) => {
+const Table = ({elements, onDelete, onEdit}) => {
     
     return (
         <div className='table-wrapper'>
@@ -20,7 +17,7 @@ const Table = ({elements, remove, onEdit}) => {
                 {elements.map((el) => {
                     return <TableRow element={el}
                                      key={el.id}
-                                     onDelete={() => {remove(el.id) }}
+                                     onDelete={() => {onDelete(el.id) }}
                                      onEdit={()=>{ onEdit(el.id) }}
                     />
                 })}
@@ -30,19 +27,13 @@ const Table = ({elements, remove, onEdit}) => {
     );
 };
 
-const mapStateToProps = ({students}) => ({
-    elements: students.elements
-});
 
-const mapDispatchToProps = (dispatch) => (
-    bindActionCreators({remove}, dispatch)
-);
 
 Table.propTypes = {
-    remove: PropTypes.func,
+    onDelete: PropTypes.func,
     onEdit: PropTypes.func,
     elements: PropTypes.array
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Table)
+export default Table;

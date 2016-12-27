@@ -15,12 +15,7 @@ ReactDOM.render((
     </Provider>
 ), document.getElementById('root'));
 
-/*    < Provider
- store = {store} >
- < App / >
- < / Provider >, document.getElementById('root')
- )
- ;*/
+
 
 
 // Жизненный цикл компонента
