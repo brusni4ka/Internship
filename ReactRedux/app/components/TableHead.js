@@ -2,7 +2,7 @@
  * Created by kate on 19/12/16.
  */
 import React, { Component } from 'react';
-import HeadCell from './headCell';
+import HeadCell from './HeadCell';
 
 
 const TableHead = () => {

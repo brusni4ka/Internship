@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Routes} from  './routes';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router'
+import {Router, browserHistory} from 'react-router'
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers/';
-import thunk from 'redux-thunk' // <-- добавили redux-thunk
+import thunk from 'redux-thunk' 
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 

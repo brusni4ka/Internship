@@ -2,13 +2,13 @@
  * Created by kate on 26/12/16.
  */
 import React, {Component, PropTypes} from 'react';
-import Table from '../components/table';
+import Table from '../components/Table';
 import Form from './Form'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {remove} from '../action/actions';
+import {remove} from '../action/studentsAction';
 import {bindActionCreators} from 'redux'
 
 
@@ -28,7 +28,7 @@ class StudentsLayout extends Component {
         this.setState({editable: id, formIsOpen: true});
     }
 
-    onSaveChanges() {
+    saveChanges() {
         this.setState({editable: null, formIsOpen: false});
     }
 
@@ -53,7 +53,7 @@ class StudentsLayout extends Component {
                     elements={this.props.elements}
                 />
                 <MuiThemeProvider muiTheme={getMuiTheme()}>
-                    <Form onSaveChanges={()=>{this.onSaveChanges()}}
+                    <Form saveChanges={()=>{this.saveChanges()}}
                           editable={this.state.editable}
                           formIsOpen={this.state.formIsOpen}
                           triggerModal={()=>this.triggerModal()}

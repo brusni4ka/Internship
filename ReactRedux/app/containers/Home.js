@@ -4,7 +4,7 @@
 import React, {Component, PropTypes} from 'react';
 import Login from '../components/LoginForm';
 import {connect} from 'react-redux';
-import {loginUser, logoutUser} from '../action/actions';
+import {loginUser, logoutUser} from '../action/userActions';
 import {bindActionCreators} from 'redux'
 
 class Home extends Component {
@@ -16,14 +16,13 @@ class Home extends Component {
 
     render() {
         const {errorMessage, isAuthenticated} = this.props.user;
+        const {loginUser} =  this.props;
         const Greet = (
             <h1>Press to <a href="" onClick={(e)=>this.onClickHandler(e)}>Logout</a></h1>
         );
-
-        const node = isAuthenticated ? Greet : <Login message={errorMessage} onUserLogin={ this.props.loginUser }/>;
         return (
             <div>
-                {node}
+                {isAuthenticated ? Greet : <Login message={errorMessage} loginUser={ loginUser }/>}
             </div>
         )
     }

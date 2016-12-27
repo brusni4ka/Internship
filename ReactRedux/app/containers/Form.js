@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import {connect} from 'react-redux';
-import {save, edit} from '../action/actions';
+import {save, edit} from '../action/studentsAction';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {bindActionCreators} from 'redux'
 injectTapEventPlugin();
@@ -57,12 +57,27 @@ class Form extends Component {
     handleSubmit(callback) {
         const {name, department, status} = this.state;
         const newStudent = {
-            name ,
+            name,
             department,
             status
         };
         this.stateToInit();
         callback(newStudent);
+    }
+
+    handleSubmitClick(elem) {
+        const {editable, saveChanges} = this.props;
+        if (editable) {
+            saveChanges();
+            this.handleEdit(edit, elem);
+        } else {
+            if (!this.validate() || this.state.error) {
+                return;
+            }
+            saveChanges();
+            this.handleSubmit(save);
+        }
+
     }
 
     handleEdit(callback, elem) {
@@ -76,9 +91,9 @@ class Form extends Component {
         this.stateToInit();
         callback(editStudent);
     }
-    
+
     render() {
-        const {save, edit, onSaveChanges, editable, triggerModal, formIsOpen, elements} = this.props;
+        const {saveChanges, editable, triggerModal, formIsOpen, elements} = this.props;
         let elem = {};
 
         if (editable) {
@@ -86,14 +101,14 @@ class Form extends Component {
         }
 
         const {name, department, status, id} = elem;
-        
+
         const actions = [
             <FlatButton
                 label="Cancel"
                 secondary={true}
                 onClick={()=>{
                 this.stateToInit();
-                onSaveChanges();
+                saveChanges();
                 }
                 }
 
@@ -103,20 +118,10 @@ class Form extends Component {
                 primary={true}
                 type="submit"
                 keyboardFocused={!this.state.error}
-                onClick={()=>{
-                if(editable){
-                     onSaveChanges();
-                     this.handleEdit(edit, elem);
-                }else{
-                     if (!this.validate() || this.state.error)return;
-                     onSaveChanges();
-                     this.handleSubmit(save);
-                 }
-                }}
+                onClick={(elem)=>this.handleSubmitClick(elem)}
             />
         ];
-
-
+        
         return (
             <div>
                 <RaisedButton label="add student" onClick={()=>triggerModal()}/>
@@ -129,7 +134,7 @@ class Form extends Component {
                     <form>
                         <div>
                             <TextField
-                                errorText={this.state.error && this.state.name.trim()===''?
+                                errorText={ this.state.error && this.state.name.trim()===''?
                                 'This field is required':''
                                 }
                                 hintText='Jack Ruffus'
@@ -185,7 +190,7 @@ const mapDispatchToProps = (dispatch)=> (
 Form.propTypes = {
     save: PropTypes.func,
     edit: PropTypes.func,
-    onSaveChanges: PropTypes.func,
+    saveChanges: PropTypes.func,
     triggerModal: PropTypes.func,
     editable: PropTypes.number,
     formIsOpen: PropTypes.bool,

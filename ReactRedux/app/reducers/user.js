@@ -8,48 +8,42 @@ import {
     LOGOUT_SUCCESS
 } from '../constants/ActionTypes'
 
-const user = (state = {
+const initialState = {
     isFetching: false,
     isAuthenticated: localStorage.getItem('id_token') ? true : false
-}, action) => {
+};
+
+const user = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_REQUEST:
             return {
-                ...state, ...{
-                    isFetching: true,
-                    isAuthenticated: false,
-                    user: action.creds
-                }
+                ...state,
+                isFetching: true,
+                isAuthenticated: false,
+                user: action.creds
             };
-            break;
         case LOGIN_SUCCESS:
             return {
-                ...state, ...{
+                ...state,
                     isFetching: false,
                     isAuthenticated: true,
                     errorMessage: ''
-                }
             };
-            break;
 
         case LOGIN_FAILURE:
             return {
-                ...state, ...{
+                ...state,
                     isFetching: false,
                     isAuthenticated: false,
                     errorMessage: action.message
-                }
             };
-            break;
 
         case LOGOUT_SUCCESS:
             return {
-                ...state, ...{
+                ...state,
                     isFetching: false,
                     isAuthenticated: false
-                }
             };
-            break;
 
         default:
             return state
@@ -58,4 +52,4 @@ const user = (state = {
 };
 
 
-export  default user;
+export default user;

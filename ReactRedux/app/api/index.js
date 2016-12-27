@@ -1,23 +1,13 @@
 /**
  * Created by kate on 27/12/16.
  */
-import {STORAGE_NAME} from '../constants/LocalStorageConfig'
-const LocalStorage = (function () {
+import {STORAGE_ITEM} from '../constants/LocalStorageConfig'
 
-    const setToStorage = (item)=>{
-        localStorage.clear(STORAGE_NAME);
-        localStorage.setItem(STORAGE_NAME, JSON.stringify(item));
-    };
-    const cleanStorage =()=>{
-        localStorage.clear(STORAGE_NAME);
-    };
-
-    return {
-        setToStorage:setToStorage,
-        cleanStorage:cleanStorage
-    }
-
-}());
-
-
-export default LocalStorage;
+export const setToStorage = (item)=>{
+    localStorage.clear(STORAGE_ITEM);
+    localStorage.setItem(STORAGE_ITEM, JSON.stringify(item));
+};
+export const cleanStorage =()=>{
+    localStorage.clear(STORAGE_ITEM);
+};
+ 

@@ -42,27 +42,33 @@ const initialState = {
 let id = initialState.elements[initialState.elements.length - 1].id;
 
 const students = (state = initialState, action) => {
-    let elements;
     switch (action.type) {
 
         case DELETE_STUDENT:
+        {
             id--;
-            elements = state.elements.filter(el => el.id !== action.id);
+            let elements = state.elements.filter(el => el.id !== action.id);
             elements = elements.map((el, i)=> {
                 el.id = i + 1;
                 return el;
             });
             return {...state, elements};
+        }
 
-        case SAVE_STUDENT:
+        case SAVE_STUDENT: {
             id++;
-            let newStudent = {...action.data, id: id};
-            return {...state, elements: [...state.elements, newStudent]};
+            let newStudent = {...action.data, id};
+            return {
+                ...state,
+                elements: [...state.elements, newStudent]
+            };
+        }
 
-        case EDIT_STUDENT:
+        case EDIT_STUDENT: {
             let student = {...action.data};
-            elements = state.elements.map(el=>el.id == action.data.id ? el = student : el);
+            let elements = state.elements.map(el=>el.id == student.id ? el = student : el);
             return {...state, elements};
+        }
 
         default:
             return state;

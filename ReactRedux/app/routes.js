@@ -6,7 +6,7 @@ import App from './containers/App';
 import React, {Component} from 'react';
 import {Route, IndexRoute} from 'react-router'
 import StudentsLayout from './containers/StudentsLayout' ;
-import NotFound from './components/notFound' ;
+import NotFound from './components/NotFound' ;
 
 
 export const Routes = (

@@ -2,8 +2,8 @@
  * Created by kate on 19/12/16.
  */
 import React, {Component, PropTypes} from 'react';
-import TableHead from '../components/tableHead';
-import TableRow from '../components/tableRow';
+import TableHead from '../components/TableHead';
+import TableRow from '../components/TableRow';
 
 
 const Table = ({elements, onDelete, onEdit}) => {

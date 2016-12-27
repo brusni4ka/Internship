@@ -3,8 +3,8 @@
  */
 import React, {Component, PropTypes} from 'react';
 
-import TableCell from './tableCell';
-import Control from './control';
+import TableCell from './TableCell';
+import Control from './Control';
 
 const TableRow = ({element, onDelete, onEdit}) => {
     const className = `Table-row`;
