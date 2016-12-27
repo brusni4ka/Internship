@@ -12,6 +12,7 @@ class Login extends Component {
             password: ''
         }
     }
+    
 
     handleSubmit(e) {
         e.preventDefault();
@@ -21,7 +22,7 @@ class Login extends Component {
     }
 
     render() {
-        
+
         const {message} = this.props || '';
         return (
             <div className='sign-in-page'>

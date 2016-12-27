@@ -5,7 +5,7 @@ import {
     LOGIN_REQUEST,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    LOGOUT
+    LOGOUT_SUCCESS
 } from '../constants/ActionTypes'
 
 const user = (state = {
@@ -42,7 +42,7 @@ const user = (state = {
             };
             break;
 
-        case LOGOUT:
+        case LOGOUT_SUCCESS:
             return {
                 ...state, ...{
                     isFetching: false,

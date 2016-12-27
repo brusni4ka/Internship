@@ -5,8 +5,12 @@ import {
     LOGIN_REQUEST,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    LOGOUT
+    LOGOUT_SUCCESS
 } from '../constants/ActionTypes'
+import {isValidEmail} from '../helpers';
+import LocalStorage from '../api';
+
+
 export const remove = (id) => ({
     type: DELETE_STUDENT,
     id
@@ -45,10 +49,20 @@ const loginError = (message)=> (
     message
 });
 
+const requestLogout = ()=> ({
+    type: LOGOUT_SUCCESS
+});
+
 export const loginUser = (creds)=> {
 
     return dispatch => {
         dispatch(requestLogin(creds));
+        
+        if(!isValidEmail(creds.username)){
+            dispatch(loginError('Your email is unvalid. Please, try one more time!'));
+            return;
+        }
+        
         let id_token = Object.values(creds).every(el=>el)? btoa(Object.values(creds).join('')):'';
 
         if (id_token == '') {
@@ -57,15 +71,20 @@ export const loginUser = (creds)=> {
             return;
         }
         setTimeout(() => {
-            localStorage.setItem('id_token', id_token);
+            LocalStorage.setToStorage(id_token);
             // Dispatch the success action
             dispatch(receiveLogin(id_token));
         }, 2000)
     }
 };
 
-export const logoutUser = ()=>({
-    type: LOGOUT
-});
+export const logoutUser = ()=>{
+    return dispatch=>{
+        LocalStorage.cleanStorage();
+        dispatch(requestLogout());
+    }
+};
+
+
 
  
